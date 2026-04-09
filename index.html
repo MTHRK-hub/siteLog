@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿</title>
+  <style>
+    :root {
+      --bg: #eef3ff;
+      --surface: #ffffff;
+      --surface-alt: #f7f9ff;
+      --text: #1a2440;
+      --muted: #60708f;
+      --accent: #2f67ff;
+      --accent-hover: #1f56ef;
+      --danger: #d5304f;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(23, 38, 89, 0.12);
+      --touch-min: 44px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f3f7ff 0%, #e8efff 100%);
+    }
+
+    body {
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+        max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    }
+
+    .app {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.is-active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid #d8e2ff;
+      border-radius: calc(var(--radius) + 4px);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    @media (min-width: 520px) {
+      .card {
+        padding: 24px 28px;
+      }
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8fb;
+    }
+
+    .top-left,
+    .top-right {
+      min-height: var(--touch-min);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-left {
+      justify-self: start;
+    }
+
+    .top-right {
+      justify-self: end;
+    }
+
+    .top-title {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .user-name {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 40vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: var(--radius);
+      min-height: var(--touch-min);
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: #e9efff;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #dce7ff;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      min-height: auto;
+      padding: 8px 10px;
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      background: #f0f4ff;
+    }
+
+    .login-wrap {
+      max-width: 400px;
+      margin: 10vh auto 0;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .field input {
+      width: 100%;
+      min-height: var(--touch-min);
+      border: 1px solid #d4def8;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-size: 1rem;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .login-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .error-msg {
+      min-height: 1.3em;
+      text-align: center;
+      margin: 12px 0 0;
+      color: var(--danger);
+      font-size: 0.88rem;
+    }
+
+    .menu-links {
+      display: grid;
+      gap: 12px;
+    }
+
+    .menu-link {
+      border: 1px solid #d4def8;
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      min-height: var(--touch-min);
+    }
+
+    .menu-link:hover {
+      border-color: #b8caff;
+      color: var(--accent);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #d8e2ff;
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+      border-top: 1px solid #ebf0ff;
+      white-space: nowrap;
+    }
+
+    thead th {
+      border-top: none;
+      background: #f3f6ff;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .btn-detail {
+      min-height: 36px;
+      padding: 6px 10px;
+      border-radius: 9px;
+      border: 1px solid #c8d7ff;
+      background: #edf3ff;
+      color: #244bbf;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .btn-detail:hover {
+      background: #dfeaff;
+    }
+
+    .detail-rows {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px;
+      align-items: baseline;
+      font-size: 0.93rem;
+    }
+
+    .detail-row dt {
+      color: var(--muted);
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .detail-row dd {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 520px) {
+      .detail-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
+    .info-text {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="screen-login" class="screen">
+      <div class="card login-wrap">
+        <header class="top-bar">
+          <div class="top-left"></div>
+          <h1 class="top-title">ログイン</h1>
+          <div class="top-right"></div>
+        </header>
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="login-id">ID</label>
+            <input id="login-id" name="id" type="text" autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="login-password">パスワード</label>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" />
+          </div>
+          <div class="login-actions">
+            <button type="submit" class="btn btn-primary">ログイン</button>
+            <button type="button" id="btn-close-login" class="btn btn-secondary">閉じる</button>
+          </div>
+        </form>
+        <p id="login-error" class="error-msg" role="alert"></p>
+      </div>
+    </section>
+
+    <section id="screen-menu" class="screen">
+      <div class="card">
+        <header class="top-bar">
+          <div class="top-left"></div>
+          <h1 class="top-title">メニュー</h1>
+          <div class="top-right">
+            <span id="menu-user-name" class="user-name"></span>
+            <button type="button" class="btn btn-ghost" data-action="logout">ログアウト</button>
+          </div>
+        </header>
+        <nav class="menu-links">
+          <button type="button" class="menu-link" id="link-friend-list">友達一覧</button>
+          <button type="button" class="menu-link" id="link-site-list">現場メモ</button>
+          <button type="button" class="menu-link" id="link-password-change">パスワード変更</button>
+        </nav>
+      </div>
+    </section>
+
+    <section id="screen-friend-list" class="screen">
+      <div class="card">
+        <header class="top-bar">
+          <div class="top-left">
+            <button type="button" class="btn btn-secondary" data-action="menu">メニューに戻る</button>
+          </div>
+          <h1 class="top-title">友達一覧</h1>
+          <div class="top-right">
+            <span class="user-name js-user-name"></span>
+            <button type="button" class="btn btn-ghost" data-action="logout">ログアウト</button>
+          </div>
+        </header>
+        <p class="info-text" id="friend-load-status"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>名前</th>
+                <th>LINE名</th>
+                <th>年齢</th>
+                <th>性別</th>
+                <th>職業</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody id="friend-list-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-friend-detail" class="screen">
+      <div class="card">
+        <header class="top-bar">
+          <div class="top-left">
+            <button type="button" class="btn btn-secondary" data-action="friend-list">一覧に戻る</button>
+          </div>
+          <h1 class="top-title">友達詳細</h1>
+          <div class="top-right">
+            <span class="user-name js-user-name"></span>
+            <button type="button" class="btn btn-ghost" data-action="logout">ログアウト</button>
+          </div>
+        </header>
+        <dl class="detail-rows" id="friend-detail-content"></dl>
+      </div>
+    </section>
+
+    <section id="screen-site-list" class="screen">
+      <div class="card">
+        <header class="top-bar">
+          <div class="top-left">
+            <button type="button" class="btn btn-secondary" data-action="menu">メニューに戻る</button>
+          </div>
+          <h1 class="top-title">現場記録一覧</h1>
+          <div class="top-right">
+            <span class="user-name js-user-name"></span>
+            <button type="button" class="btn btn-ghost" data-action="logout">ログアウト</button>
+          </div>
+        </header>
+        <p class="info-text" id="site-load-status"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>項目</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody id="site-list-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-site-detail" class="screen">
+      <div class="card">
+        <header class="top-bar">
+          <div class="top-left">
+            <button type="button" class="btn btn-secondary" data-action="site-list">一覧に戻る</button>
+          </div>
+          <h1 class="top-title">現場記録詳細</h1>
+          <div class="top-right">
+            <span class="user-name js-user-name"></span>
+            <button type="button" class="btn btn-ghost" data-action="logout">ログアウト</button>
+          </div>
+        </header>
+        <dl class="detail-rows" id="site-detail-content"></dl>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const SHEET_ID = "1MmvDvR9hxb_bdda0Zsxr4ZKYeSjG80CQnLvOGPTABYE";
+    const SHEETS = {
+      users: { gid: "0", name: "ユーザーデータ" },
+      friends: { gid: "1058818904", name: "友達データ" },
+      siteLogs: { gid: "241811860", name: "現場記録データ" }
+    };
+
+    const FALLBACK_DATA = {
+      friends: [
+        {
+          "名前": "山田 太郎",
+          "LINE名": "taro_y",
+          "年齢": "30",
+          "性別": "男",
+          "職業": "エンジニア",
+          "出会った日": "2024-06-01",
+          "出会った場所": "渋谷",
+          "相手の情報": "大学の同級生",
+          "今後の予定": "来月ランチ予定"
+        }
+      ],
+      siteLogs: [
+        {
+          "日付": "2026-04-01",
+          "項目": "つくる",
+          "出会った相手": "山田 太郎",
+          "メモ": "進捗確認",
+          "ToDo": "次回課題整理"
+        }
+      ]
+    };
+
+    const state = {
+      isLoggedIn: false,
+      currentScreen: "login",
+      currentUser: null,
+      users: [],
+      friends: [],
+      siteLogs: [],
+      selectedFriendIndex: -1,
+      selectedSiteLogIndex: -1
+    };
+
+    const screens = {
+      login: document.getElementById("screen-login"),
+      menu: document.getElementById("screen-menu"),
+      friendList: document.getElementById("screen-friend-list"),
+      friendDetail: document.getElementById("screen-friend-detail"),
+      siteList: document.getElementById("screen-site-list"),
+      siteDetail: document.getElementById("screen-site-detail")
+    };
+
+    const loginForm = document.getElementById("login-form");
+    const loginError = document.getElementById("login-error");
+    const friendListBody = document.getElementById("friend-list-body");
+    const friendDetailContent = document.getElementById("friend-detail-content");
+    const siteListBody = document.getElementById("site-list-body");
+    const siteDetailContent = document.getElementById("site-detail-content");
+    const friendLoadStatus = document.getElementById("friend-load-status");
+    const siteLoadStatus = document.getElementById("site-load-status");
+
+    function csvUrl(gid) {
+      return "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/export?format=csv&gid=" + gid;
+    }
+
+    function gvizUrl(gid, callbackName) {
+      return "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
+        "/gviz/tq?gid=" + gid +
+        "&tqx=out:json;responseHandler:" + encodeURIComponent(callbackName);
+    }
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let field = "";
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+        if (ch === '"') {
+          if (inQuotes && next === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+        if (ch === "," && !inQuotes) {
+          row.push(field);
+          field = "";
+          continue;
+        }
+        if ((ch === "\n" || ch === "\r") && !inQuotes) {
+          if (ch === "\r" && next === "\n") i++;
+          row.push(field);
+          const hasData = row.some(function (v) { return String(v).trim() !== ""; });
+          if (hasData) rows.push(row);
+          row = [];
+          field = "";
+          continue;
+        }
+        field += ch;
+      }
+      row.push(field);
+      if (row.some(function (v) { return String(v).trim() !== ""; })) rows.push(row);
+      if (!rows.length) return [];
+
+      const headers = rows[0].map(function (h) { return String(h).trim(); });
+      const list = [];
+      for (let i = 1; i < rows.length; i++) {
+        const item = {};
+        for (let j = 0; j < headers.length; j++) {
+          item[headers[j]] = rows[i][j] == null ? "" : String(rows[i][j]).trim();
+        }
+        list.push(item);
+      }
+      return list;
+    }
+
+    function loadSheetRowsViaGviz(gid) {
+      return new Promise(function (resolve, reject) {
+        const callbackName = "__siteLogGvizCb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        let done = false;
+        const timer = setTimeout(function () {
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error("gviz timeout"));
+        }, 10000);
+
+        const script = document.createElement("script");
+
+        function cleanup() {
+          clearTimeout(timer);
+          try {
+            delete window[callbackName];
+          } catch (_) {
+            window[callbackName] = undefined;
+          }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[callbackName] = function (data) {
+          if (done) return;
+          done = true;
+          cleanup();
+          try {
+            const table = data && data.table;
+            const cols = table && table.cols ? table.cols : [];
+            const rows = table && table.rows ? table.rows : [];
+            const headers = cols.map(function (c, idx) {
+              const label = c && c.label ? String(c.label).trim() : "";
+              return label || ("col_" + idx);
+            });
+            const list = rows.map(function (r) {
+              const item = {};
+              const cells = r && r.c ? r.c : [];
+              headers.forEach(function (h, idx) {
+                const cell = cells[idx];
+                item[h] = cell && cell.v != null ? String(cell.v).trim() : "";
+              });
+              return item;
+            }).filter(function (item) {
+              return Object.values(item).some(function (v) { return String(v).trim() !== ""; });
+            });
+            resolve(list);
+          } catch (e) {
+            reject(e);
+          }
+        };
+
+        script.onerror = function () {
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error("gviz script load failed"));
+        };
+        script.src = gvizUrl(gid, callbackName);
+        document.head.appendChild(script);
+      });
+    }
+
+    async function loadSheetRows(key, options) {
+      const opts = options || {};
+      const spec = SHEETS[key];
+      try {
+        const res = await fetch(csvUrl(spec.gid), { cache: "no-store" });
+        if (!res.ok) throw new Error(spec.name + " の取得に失敗しました");
+        const text = await res.text();
+        const rows = parseCsv(text);
+        if (!rows.length) throw new Error(spec.name + " に有効データがありません");
+        return rows;
+      } catch (_) {
+        try {
+          const rows = await loadSheetRowsViaGviz(spec.gid);
+          if (!rows.length) throw new Error(spec.name + " に有効データがありません");
+          return rows;
+        } catch (err) {
+          if (opts.allowFallback && FALLBACK_DATA[key]) {
+            return FALLBACK_DATA[key].slice();
+          }
+          throw err;
+        }
+      }
+    }
+
+    function validateUserColumns(rows) {
+      if (!rows.length) return false;
+      const first = rows[0];
+      return Object.prototype.hasOwnProperty.call(first, "ユーザーID") &&
+        Object.prototype.hasOwnProperty.call(first, "パスワード");
+    }
+
+    function validateFriendColumns(rows) {
+      if (!rows.length) return false;
+      return Object.prototype.hasOwnProperty.call(rows[0], "名前");
+    }
+
+    function validateSiteColumns(rows) {
+      if (!rows.length) return false;
+      return Object.prototype.hasOwnProperty.call(rows[0], "日付") &&
+        Object.prototype.hasOwnProperty.call(rows[0], "項目");
+    }
+
+    function isLikelyHeaderMismatch(rows, key) {
+      if (!rows.length) return false;
+      if (key === "users") return !validateUserColumns(rows);
+      if (key === "friends") return !validateFriendColumns(rows);
+      if (key === "siteLogs") return !validateSiteColumns(rows);
+      return false;
+    }
+
+    function getSheetErrorMessage(key, rows) {
+      if (isLikelyHeaderMismatch(rows, key)) {
+        return "取得は成功しましたが、シートのヘッダ名が設計書と一致していません。列名を確認してください。";
+      }
+      if (key === "users") {
+        return "ユーザーデータを取得できません。シート共有設定（リンクを知っている全員が閲覧可）を確認してください。";
+      }
+      if (key === "friends") {
+        return "友達データを取得できません。シート共有設定（リンクを知っている全員が閲覧可）を確認してください。";
+      }
+      return "現場記録データを取得できません。シート共有設定（リンクを知っている全員が閲覧可）を確認してください。";
+    }
+
+    async function loadSheetRowsStrict(key) {
+      const rows = await loadSheetRows(key, { allowFallback: false });
+      if (isLikelyHeaderMismatch(rows, key)) {
+        throw new Error("header_mismatch");
+      }
+      return rows;
+    }
+
+    async function safeLoadSheetRows(key) {
+      try {
+        const rows = await loadSheetRowsStrict(key);
+        return { ok: true, rows: rows, message: "" };
+      } catch (_) {
+        return { ok: false, rows: [], message: getSheetErrorMessage(key, []) };
+      }
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement("div");
+      div.textContent = value == null ? "" : String(value);
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const d = new Date(dateStr.includes("T") ? dateStr : dateStr + "T12:00:00");
+      if (Number.isNaN(d.getTime())) return dateStr;
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return y + "/" + m + "/" + day;
+    }
+
+    function showScreen(screenId) {
+      state.currentScreen = screenId;
+      Object.keys(screens).forEach(function (key) {
+        const active = key === screenId;
+        screens[key].classList.toggle("is-active", active);
+      });
+    }
+
+    function updateUserNames() {
+      const displayName = state.currentUser && state.currentUser["ユーザー名"] ? state.currentUser["ユーザー名"] : "";
+      const menuName = document.getElementById("menu-user-name");
+      menuName.textContent = displayName;
+      document.querySelectorAll(".js-user-name").forEach(function (el) {
+        el.textContent = displayName;
+      });
+    }
+
+    function renderFriendList() {
+      friendListBody.innerHTML = "";
+      state.friends.forEach(function (f, index) {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + escapeHtml(f["名前"]) + "</td>" +
+          "<td>" + escapeHtml(f["LINE名"]) + "</td>" +
+          "<td>" + escapeHtml(f["年齢"]) + "</td>" +
+          "<td>" + escapeHtml(f["性別"]) + "</td>" +
+          "<td>" + escapeHtml(f["職業"]) + "</td>" +
+          "<td><button type='button' class='btn-detail' data-friend-index='" + index + "'>詳細</button></td>";
+        friendListBody.appendChild(tr);
+      });
+      friendListBody.querySelectorAll("[data-friend-index]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const idx = Number(btn.getAttribute("data-friend-index"));
+          showFriendDetail(idx);
+        });
+      });
+    }
+
+    function showFriendDetail(index) {
+      const f = state.friends[index];
+      if (!f) return;
+      state.selectedFriendIndex = index;
+      friendDetailContent.innerHTML =
+        "<div class='detail-row'><dt>名前</dt><dd>" + escapeHtml(f["名前"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>LINE名</dt><dd>" + escapeHtml(f["LINE名"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>年齢</dt><dd>" + escapeHtml(f["年齢"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>性別</dt><dd>" + escapeHtml(f["性別"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>職業</dt><dd>" + escapeHtml(f["職業"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>出会った日</dt><dd>" + escapeHtml(formatDate(f["出会った日"])) + "</dd></div>" +
+        "<div class='detail-row'><dt>出会った場所</dt><dd>" + escapeHtml(f["出会った場所"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>相手の情報</dt><dd>" + escapeHtml(f["相手の情報"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>今後の予定</dt><dd>" + escapeHtml(f["今後の予定"]) + "</dd></div>";
+      showScreen("friendDetail");
+    }
+
+    function renderSiteLogList() {
+      siteListBody.innerHTML = "";
+      state.siteLogs.forEach(function (log, index) {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + escapeHtml(formatDate(log["日付"])) + "</td>" +
+          "<td>" + escapeHtml(log["項目"]) + "</td>" +
+          "<td><button type='button' class='btn-detail' data-log-index='" + index + "'>詳細</button></td>";
+        siteListBody.appendChild(tr);
+      });
+      siteListBody.querySelectorAll("[data-log-index]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const idx = Number(btn.getAttribute("data-log-index"));
+          showSiteLogDetail(idx);
+        });
+      });
+    }
+
+    function showSiteLogDetail(index) {
+      const log = state.siteLogs[index];
+      if (!log) return;
+      state.selectedSiteLogIndex = index;
+      siteDetailContent.innerHTML =
+        "<div class='detail-row'><dt>日付</dt><dd>" + escapeHtml(formatDate(log["日付"])) + "</dd></div>" +
+        "<div class='detail-row'><dt>項目</dt><dd>" + escapeHtml(log["項目"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>出会った相手</dt><dd>" + escapeHtml(log["出会った相手"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>メモ</dt><dd>" + escapeHtml(log["メモ"]) + "</dd></div>" +
+        "<div class='detail-row'><dt>ToDo</dt><dd>" + escapeHtml(log["ToDo"]) + "</dd></div>";
+      showScreen("siteDetail");
+    }
+
+    async function login() {
+      const id = document.getElementById("login-id").value.trim();
+      const password = document.getElementById("login-password").value;
+      loginError.textContent = "";
+
+      if (!id || !password) {
+        loginError.textContent = "IDとパスワードを入力してください";
+        return;
+      }
+
+      if (!state.users.length) {
+        const result = await safeLoadSheetRows("users");
+        if (!result.ok) {
+          loginError.textContent = result.message;
+          return;
+        }
+        state.users = result.rows;
+      }
+
+      const matched = state.users.find(function (u) {
+        return u["ユーザーID"] === id && u["パスワード"] === password;
+      });
+      if (!matched) {
+        loginError.textContent = "IDまたはパスワードが正しくありません";
+        return;
+      }
+
+      state.isLoggedIn = true;
+      state.currentUser = matched;
+      sessionStorage.setItem("siteLog-login-user", JSON.stringify({
+        id: matched["ユーザーID"],
+        name: matched["ユーザー名"]
+      }));
+      updateUserNames();
+      showScreen("menu");
+      document.getElementById("login-id").value = "";
+      document.getElementById("login-password").value = "";
+    }
+
+    function logout() {
+      state.isLoggedIn = false;
+      state.currentUser = null;
+      state.selectedFriendIndex = -1;
+      state.selectedSiteLogIndex = -1;
+      sessionStorage.removeItem("siteLog-login-user");
+      updateUserNames();
+      loginError.textContent = "";
+      showScreen("login");
+    }
+
+    function restoreSession() {
+      try {
+        const raw = sessionStorage.getItem("siteLog-login-user");
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved || !saved.id) return;
+        state.isLoggedIn = true;
+        state.currentUser = {
+          "ユーザーID": saved.id,
+          "ユーザー名": saved.name || saved.id
+        };
+        updateUserNames();
+        showScreen("menu");
+      } catch (_) {
+        sessionStorage.removeItem("siteLog-login-user");
+      }
+    }
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      login();
+    });
+
+    document.getElementById("btn-close-login").addEventListener("click", function () {
+      loginError.textContent = "";
+      document.getElementById("login-id").value = "";
+      document.getElementById("login-password").value = "";
+      try {
+        window.close();
+      } catch (_) {}
+    });
+
+    document.querySelectorAll("[data-action='logout']").forEach(function (el) {
+      el.addEventListener("click", logout);
+    });
+
+    document.querySelectorAll("[data-action='menu']").forEach(function (el) {
+      el.addEventListener("click", function () {
+        showScreen("menu");
+      });
+    });
+
+    document.querySelectorAll("[data-action='friend-list']").forEach(function (el) {
+      el.addEventListener("click", function () {
+        showScreen("friendList");
+      });
+    });
+
+    document.querySelectorAll("[data-action='site-list']").forEach(function (el) {
+      el.addEventListener("click", function () {
+        showScreen("siteList");
+      });
+    });
+
+    document.getElementById("link-friend-list").addEventListener("click", async function () {
+      friendLoadStatus.textContent = "友達データを読み込み中...";
+      const result = await safeLoadSheetRows("friends");
+      if (result.ok) {
+        state.friends = result.rows;
+        friendLoadStatus.textContent = "友達データ " + state.friends.length + "件を表示中";
+        renderFriendList();
+      } else {
+        state.friends = [];
+        friendLoadStatus.textContent = result.message;
+        renderFriendList();
+      }
+      showScreen("friendList");
+    });
+
+    document.getElementById("link-site-list").addEventListener("click", async function () {
+      siteLoadStatus.textContent = "現場記録データを読み込み中...";
+      const result = await safeLoadSheetRows("siteLogs");
+      if (result.ok) {
+        state.siteLogs = result.rows;
+        siteLoadStatus.textContent = "現場記録データ " + state.siteLogs.length + "件を表示中";
+        renderSiteLogList();
+      } else {
+        state.siteLogs = [];
+        siteLoadStatus.textContent = result.message;
+        renderSiteLogList();
+      }
+      showScreen("siteList");
+    });
+
+    document.getElementById("link-password-change").addEventListener("click", function () {
+      window.alert("パスワード変更画面は未定義のため未実装です。");
+    });
+
+    showScreen("login");
+    restoreSession();
+  </script>
+</body>
+</html>
