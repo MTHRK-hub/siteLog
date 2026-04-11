@@ -6,6 +6,33 @@
   <title>現場記録簿</title>
 </head>
 <body>
-  <p>起動中です。自動遷移しない場合は <a href="./src/html/SCR-00-00.html">こちら</a> を開いてください。</p>
+  <p>起動中です...</p>
+  <script>
+    (function () {
+      var W = 850;
+      var H = 1100;
+      // ウィンドウを画面中央に配置
+      var left = Math.max(0, Math.round((screen.width  - W) / 2));
+      var top  = Math.max(0, Math.round((screen.height - H) / 2));
+      var features = [
+        "width="  + W,
+        "height=" + H,
+        "left="   + left,
+        "top="    + top,
+        "resizable=yes",
+        "scrollbars=no"
+      ].join(",");
+
+      var win = window.open("./src/html/SCR-00-00.html", "SiteLog", features);
+
+      if (win) {
+        // 新しいウィンドウが開けた場合、このタブを閉じる
+        window.close();
+      } else {
+        // ポップアップがブロックされた場合は同タブで遷移
+        window.location.href = "./src/html/SCR-00-00.html";
+      }
+    })();
+  </script>
 </body>
 </html>

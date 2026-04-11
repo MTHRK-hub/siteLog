@@ -1,17 +1,24 @@
 /*
- * SCR-00-01 共通ヘッダ スタイル (table レイアウト版)
+ * SCR-00-01 共通ヘッダ スタイル
+ *
+ * ヘッダイメージ.png に準拠した 2行 × 3列テーブル構成:
+ *
+ *   col-side(30%) | col-center(40%) | col-side(30%)
+ *   ┌─────────────┬─────────────────┬─────────────┐
+ *   │ ① ユーザー名│  ③ 画面ID(小)  │ ② ログアウト│  hdr-row(50%)
+ *   │             │  ④ 画面名(大)  │             │
+ *   │ ⑤ 戻るボタン│    (rowspan=2) │ ⑥ 追加ボタン│  hdr-row(50%)
+ *   └─────────────┴─────────────────┴─────────────┘
  */
 
 /* ===========================
    ヘッダ外枠
    =========================== */
 .hdr-wrap {
-  padding: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  /* iframe の高さ・幅全体を使う */
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ===========================
@@ -19,65 +26,85 @@
    =========================== */
 .header-table {
   width: 100%;
-  height: 100%;          /* iframe 全高に広げる */
+  height: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  /* common.css の table スタイルを上書き */
   border: none;
   font-size: inherit;
 }
 
-/* common.css の td スタイルをヘッダ内でリセット */
+/* colgroup で列幅を明示 */
+.header-table .col-side   { width: 30%; }
+.header-table .col-center { width: 40%; }
+
+/* 各行を均等高さに */
+.hdr-row {
+  height: 50%;
+}
+
+/* common.css の table/td スタイルをリセット */
 .header-table td {
   border: none;
-  border-top: none;
   background: transparent;
+  padding: 4px 10px;
   white-space: nowrap;
-  padding: 4px 8px;
+  overflow: hidden;
+}
+
+/* 左列 */
+.hdr-left {
+  text-align: left;
   vertical-align: middle;
 }
 
-/* 左列: ユーザー名 (上段) / 戻るボタン (下段) */
-.hdr-left {
-  width: 30%;
-  text-align: left;
+/* 右列 */
+.hdr-right {
+  text-align: right;
+  vertical-align: middle;
 }
 
-/* 中央列: 画面ID + 画面名 (2行結合・縦横中央) */
+/* 中央列: rowspan=2 で両行を占有・縦横中央 */
 .hdr-center {
-  width: 40%;
   text-align: center;
   vertical-align: middle;
 }
 
-/* 右列: ログアウト (上段) / 追加ボタン (下段) */
-.hdr-right {
-  width: 30%;
-  text-align: right;
-}
+/* 上段セル: 上寄せ */
+.hdr-top    { vertical-align: bottom; }
+
+/* 下段セル: 下寄せ */
+.hdr-bottom { vertical-align: top; }
 
 /* ===========================
-   ヘッダ内タイトル
+   中央コンテンツ (③④)
    =========================== */
-.top-title {
-  margin: 0;
-  font-size: clamp(1rem, 4vw, 1.25rem);
+.hdr-center-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+/* ③ 画面ID（画面名の半分サイズ） */
+.header-screen-id {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ④ 画面名 */
+.header-title {
+  display: block;
+  font-size: clamp(0.95rem, 3vw, 1.2rem);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
-/* 画面ID (③: 画面名の上・半分サイズ) */
-.header-screen-id {
-  display: block;
-  font-size: 0.5em;
-  font-weight: 400;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-  margin-bottom: 2px;
-}
-
 /* ===========================
-   ヘッダ内ユーザー名
+   ① ユーザー名
    =========================== */
 .user-name {
   font-size: 0.85rem;
@@ -90,7 +117,7 @@
 }
 
 /* ===========================
-   名前リンク（友達一覧・現場記録一覧の行クリック）
+   名前リンク（友達一覧・現場記録一覧）
    =========================== */
 .name-link {
   background: none;

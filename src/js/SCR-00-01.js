@@ -112,20 +112,42 @@
         escHtml(extraLabel) + "</button>";
     }
 
+    /*
+     * ヘッダイメージ.png に準拠したテーブル構成
+     *
+     *   ┌──────────────┬─────────────────┬──────────────┐
+     *   │ ① ユーザー名 │  ③ 画面ID (小)  │ ② ログアウト │
+     *   │              │  ④ 画面名 (大)  │              │
+     *   │ ⑤ 戻るボタン │                 │ ⑥ 追加ボタン │
+     *   └──────────────┴─────────────────┴──────────────┘
+     *
+     * colgroup で列幅を明示し、hdr-center が rowspan="2" で両行を占有する。
+     */
     var header = document.createElement("header");
     header.className = "hdr-wrap";
     header.innerHTML =
-      '<table class="header-table"><tbody>' +
-        '<tr>' +
-          '<td class="hdr-left">'   + userHtml   + "</td>" +
-          '<td class="hdr-center" rowspan="2"><h1 class="top-title">' + centerHtml + "</h1></td>" +
-          '<td class="hdr-right">'  + logoutHtml + "</td>" +
-        "</tr>" +
-        '<tr>' +
-          '<td class="hdr-left">'   + navHtml    + "</td>" +
-          '<td class="hdr-right">'  + extraHtml  + "</td>" +
-        "</tr>" +
-      "</tbody></table>";
+      '<table class="header-table">' +
+        '<colgroup>' +
+          '<col class="col-side">' +
+          '<col class="col-center">' +
+          '<col class="col-side">' +
+        '</colgroup>' +
+        '<tbody>' +
+          '<tr class="hdr-row">' +
+            '<td class="hdr-left hdr-top">'    + userHtml   + "</td>" +
+            '<td class="hdr-center" rowspan="2">' +
+              '<div class="hdr-center-inner">' +
+                (screenId ? '<span class="header-screen-id">' + escHtml(screenId) + "</span>" : "") +
+                '<span class="header-title">' + escHtml(title) + "</span>" +
+              "</div>" +
+            "</td>" +
+            '<td class="hdr-right hdr-top">'   + logoutHtml + "</td>" +
+          "</tr>" +
+          '<tr class="hdr-row">' +
+            '<td class="hdr-left hdr-bottom">'  + navHtml   + "</td>" +
+            '<td class="hdr-right hdr-bottom">' + extraHtml + "</td>" +
+          "</tr>" +
+        "</tbody></table>";
 
     root.innerHTML = "";
     root.appendChild(header);
