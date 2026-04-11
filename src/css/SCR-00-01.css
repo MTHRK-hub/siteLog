@@ -36,8 +36,8 @@
 }
 
 /* colgroup で列幅を明示 (1,4列目:30% / 2,3列目:20%) */
-.header-table .col-side   { width: 40%; }
-.header-table .col-center { width: 10%; }
+.header-table .col-side   { width: 38.5%; }
+.header-table .col-center { width: 11.5%; }
 
 /* 行1・行3: 均等高さ */
 .hdr-row {
@@ -89,7 +89,7 @@
 
 /* ③ 画面ID（行1中央 / 画面名の半分サイズ） */
 .header-screen-id {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 400;
   color: var(--muted);
   letter-spacing: 0.05em;
