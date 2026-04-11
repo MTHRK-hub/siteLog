@@ -36,8 +36,8 @@
 }
 
 /* colgroup で列幅を明示 (1,4列目:30% / 2,3列目:20%) */
-.header-table .col-side   { width: 35%; }
-.header-table .col-center { width: 15%; }
+.header-table .col-side   { width: 38%; }
+.header-table .col-center { width: 12%; }
 
 /* 行1・行3: 均等高さ */
 .hdr-row {
