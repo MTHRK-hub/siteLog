@@ -1,13 +1,15 @@
 /*
  * SCR-00-01 共通ヘッダ スタイル
  *
- * ヘッダイメージ.png に準拠した 2行 × 3列テーブル構成:
+ * 3行 × 3列テーブル構成:
  *
  *   col-side(30%) | col-center(40%) | col-side(30%)
  *   ┌─────────────┬─────────────────┬─────────────┐
- *   │ ① ユーザー名│  ③ 画面ID(小)  │ ② ログアウト│  hdr-row(50%)
- *   │             │  ④ 画面名(大)  │             │
- *   │ ⑤ 戻るボタン│    (rowspan=2) │ ⑥ 追加ボタン│  hdr-row(50%)
+ *   │ ① ユーザー名│  ③ 画面ID(小)  │ ② ログアウト│  行1
+ *   ├─────────────┴─────────────────┴─────────────┤
+ *   │         ④ 画面名(大, colspan=3)              │  行2
+ *   ├─────────────┬─────────────────┬─────────────┤
+ *   │ ⑤ 戻るボタン│                 │ ⑥ 追加ボタン│  行3
  *   └─────────────┴─────────────────┴─────────────┘
  */
 
@@ -37,9 +39,14 @@
 .header-table .col-side   { width: 30%; }
 .header-table .col-center { width: 40%; }
 
-/* 各行を均等高さに */
+/* 行1・行3: 均等高さ */
 .hdr-row {
-  height: 50%;
+  height: 33.33%;
+}
+
+/* 行2（画面名行）: 少し高めに */
+.hdr-row-title {
+  height: 34%;
 }
 
 /* common.css の table/td スタイルをリセット */
@@ -63,42 +70,34 @@
   vertical-align: middle;
 }
 
-/* 中央列: rowspan=2 で両行を占有・縦横中央 */
+/* 中央列（行1・行3） */
 .hdr-center {
   text-align: center;
   vertical-align: middle;
 }
 
-/* 上段セル: 上寄せ */
-.hdr-top    { vertical-align: bottom; }
-
-/* 下段セル: 下寄せ */
-.hdr-bottom { vertical-align: top; }
-
-/* ===========================
-   中央コンテンツ (③④)
-   =========================== */
-.hdr-center-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+/* 行2: 画面名セル（colspan=3 / 縦横中央） */
+.hdr-title {
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px 10px;
 }
 
-/* ③ 画面ID（画面名の半分サイズ） */
+/* ===========================
+   中央コンテンツ
+   =========================== */
+
+/* ③ 画面ID（行1中央 / 画面名の半分サイズ） */
 .header-screen-id {
-  display: block;
-  font-size: 0.55rem;
+  font-size: 0.8rem;
   font-weight: 400;
   color: var(--muted);
   letter-spacing: 0.05em;
 }
 
-/* ④ 画面名 */
+/* ④ 画面名（行2 / colspan=3 全幅） */
 .header-title {
-  display: block;
-  font-size: clamp(0.95rem, 3vw, 1.2rem);
+  font-size: clamp(1.35rem, 3vw, 1.2rem);
   font-weight: 700;
   letter-spacing: 0.02em;
 }

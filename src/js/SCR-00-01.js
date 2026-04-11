@@ -113,15 +113,15 @@
     }
 
     /*
-     * ヘッダイメージ.png に準拠したテーブル構成
+     * ヘッダ構成 (3行 × 3列)
      *
      *   ┌──────────────┬─────────────────┬──────────────┐
-     *   │ ① ユーザー名 │  ③ 画面ID (小)  │ ② ログアウト │
-     *   │              │  ④ 画面名 (大)  │              │
-     *   │ ⑤ 戻るボタン │                 │ ⑥ 追加ボタン │
+     *   │ ① ユーザー名 │  ③ 画面ID (小)  │ ② ログアウト │  行1
+     *   ├──────────────┴─────────────────┴──────────────┤
+     *   │           ④ 画面名 (大, colspan=3)             │  行2
+     *   ├──────────────┬─────────────────┬──────────────┤
+     *   │ ⑤ 戻るボタン │                 │ ⑥ 追加ボタン │  行3
      *   └──────────────┴─────────────────┴──────────────┘
-     *
-     * colgroup で列幅を明示し、hdr-center が rowspan="2" で両行を占有する。
      */
     var header = document.createElement("header");
     header.className = "hdr-wrap";
@@ -134,18 +134,19 @@
         '</colgroup>' +
         '<tbody>' +
           '<tr class="hdr-row">' +
-            '<td class="hdr-left hdr-top">'    + userHtml   + "</td>" +
-            '<td class="hdr-center" rowspan="2">' +
-              '<div class="hdr-center-inner">' +
-                (screenId ? '<span class="header-screen-id">' + escHtml(screenId) + "</span>" : "") +
-                '<span class="header-title">' + escHtml(title) + "</span>" +
-              "</div>" +
+            '<td class="hdr-left">'   + userHtml   + "</td>" +
+            '<td class="hdr-center">' +
+              (screenId ? '<span class="header-screen-id">' + escHtml(screenId) + "</span>" : "") +
             "</td>" +
-            '<td class="hdr-right hdr-top">'   + logoutHtml + "</td>" +
+            '<td class="hdr-right">'  + logoutHtml + "</td>" +
+          "</tr>" +
+          '<tr class="hdr-row hdr-row-title">' +
+            '<td class="hdr-title" colspan="3"><span class="header-title">' + escHtml(title) + "</span></td>" +
           "</tr>" +
           '<tr class="hdr-row">' +
-            '<td class="hdr-left hdr-bottom">'  + navHtml   + "</td>" +
-            '<td class="hdr-right hdr-bottom">' + extraHtml + "</td>" +
+            '<td class="hdr-left">'   + navHtml   + "</td>" +
+            '<td class="hdr-center"></td>' +
+            '<td class="hdr-right">'  + extraHtml + "</td>" +
           "</tr>" +
         "</tbody></table>";
 
