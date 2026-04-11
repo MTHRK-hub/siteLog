@@ -9,8 +9,8 @@
   padding: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   /* iframe の高さ・幅全体を使う */
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 80px;
   box-sizing: border-box;
 }
 
@@ -18,8 +18,8 @@
    ヘッダテーブル
    =========================== */
 .header-table {
-  width: 100%;
-  height: 100%;          /* iframe 全高に広げる */
+  width: 500px;
+  height: 100px;          /* iframe 全高に広げる */
   border-collapse: collapse;
   table-layout: fixed;
   /* common.css の table スタイルを上書き */
