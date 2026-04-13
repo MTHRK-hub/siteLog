@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿 - 友達編集</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/SCR-00-01.css" />
+  <link rel="stylesheet" href="../css/SCR-03-04.css" />
+</head>
+<body class="friend-form-page">
+  <div class="app">
+    <div class="card">
+      <form id="friend-edit-form" class="form-grid" novalidate>
+        <label>名前<input name="名前" required /></label>
+        <label>LINE名<input name="LINE名" required /></label>
+        <label>年齢差<input name="年齢差" type="number" id="input-age-diff" /></label>
+        <label>生年月日<input name="生年月日" type="date" id="input-birthdate" /></label>
+        <fieldset class="radio-fieldset">
+          <legend class="radio-legend">性別</legend>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="性別" value="男" />男</label>
+            <label class="radio-label"><input type="radio" name="性別" value="女" />女</label>
+            <label class="radio-label"><input type="radio" name="性別" value="その他" />その他</label>
+          </div>
+        </fieldset>
+        <label>職業<input name="職業" /></label>
+        <label>出会った日<input name="出会った日" type="date" /></label>
+        <label>出会った場所<input name="出会った場所" /></label>
+        <label>相手の情報<textarea name="相手の情報"></textarea></label>
+        <label>今後の予定<textarea name="今後の予定"></textarea></label>
+        <p id="friend-edit-error" class="error-msg" role="alert"></p>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">更新</button>
+          <button type="button" class="btn btn-secondary" id="btn-edit-cancel">キャンセル</button>
+        </div>
+      </form>
+      <div id="confirm-dialog" class="dialog-overlay" hidden>
+        <div class="dialog-box">
+          <p class="dialog-msg">更新しますか？</p>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-primary" id="btn-confirm-ok">はい</button>
+            <button type="button" class="btn btn-secondary" id="btn-confirm-cancel">キャンセル</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.SITELOG_FRIENDS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzslsgfnlEFzyDA6W4ysgPJYz8w2PDOG_bCZh5qCy7lQvnfyYa9rR-kkLZGGXENb81D/exec";
+  </script>
+  <script src="../js/common.js?v=20260411-1"></script>
+  <script src="../js/SCR-03-04.js?v=20260411-1"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿</title>
+  <style>
+    /*
+     * フレームページ (SCR-00-00)
+     *
+     * sample/フレームイメージ.png に準拠:
+     *   ① ヘッダ領域 (固定高・スクロール不可) ← SCR-00-01.html
+     *   ② 各画面領域 (残り高・スクロール可)   ← 各コンテンツHTML
+     */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0e3583;
+      display: flex;
+      flex-direction: column;
+    }
+    /* ① ヘッダ領域 */
+    #header-frame {
+      width: 100%;
+      height: 150px;
+      border: none;
+      display: block;
+      flex-shrink: 0;
+    }
+    /* ② コンテンツ領域 */
+    #content-frame {
+      width: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- ① ヘッダ領域: SCR-00-01.html -->
+  <iframe
+    id="header-frame"
+    src="./SCR-00-01.html"
+    name="header"
+    title="ヘッダ"
+  ></iframe>
+  <!-- ② コンテンツ領域: 各画面HTML -->
+  <iframe
+    id="content-frame"
+    src="./SCR-01-01.html"
+    name="main"
+    title="コンテンツ"
+  ></iframe>
+
+  <script>
+    /*
+     * メッセージ中継スクリプト
+     *
+     * file:// プロトコルではフレーム間の直接 JS アクセスがブロックされるため、
+     * postMessage を使ってフレーム間通信を行う。
+     * 親フレーム (SCR-00-00) がブローカーとして中継する。
+     *
+     * メッセージ種別:
+     *   updateHeader  : コンテンツ → 親 → ヘッダ  (ヘッダ表示更新)
+     *   navigate      : ヘッダ/コンテンツ → 親    (コンテンツフレーム遷移)
+     *   logout        : ヘッダ → 親               (セッションクリア+ログイン画面へ)
+     */
+    (function () {
+      var SCREEN_PATHS = {
+        login:          "SCR-01-01.html",
+        menu:           "SCR-02-01.html",
+        friendList:     "SCR-03-01.html",
+        friendDetail:   "SCR-03-02.html",
+        friendCreate:   "SCR-03-03.html",
+        friendEdit:     "SCR-03-04.html",
+        siteList:       "SCR-04-01.html",
+        siteDetail:     "SCR-04-02.html",
+        siteCreate:     "SCR-04-03.html",
+        siteEdit:       "SCR-04-04.html",
+        completion:     "SCR-99-01.html",
+        passwordChange: "SCR-A1-01.html",
+        userCreate:     "SCR-A2-01.html",
+        userRegister:   "SCR-A2-02.html"
+      };
+
+      var headerFrame  = document.getElementById("header-frame");
+      var contentFrame = document.getElementById("content-frame");
+
+      window.addEventListener("message", function (event) {
+        var data = event.data;
+        if (!data || !data.type) return;
+
+        if (data.type === "updateHeader") {
+          // コンテンツページ → ヘッダフレームへ転送
+          headerFrame.contentWindow.postMessage(data, "*");
+
+        } else if (data.type === "navigate") {
+          // ヘッダのボタン → コンテンツフレームを遷移
+          var path = SCREEN_PATHS[data.screen];
+          if (path) contentFrame.src = "./" + path;
+
+        } else if (data.type === "logout") {
+          // ヘッダのログアウト → ログイン画面へ遷移(セッションクリア付き)
+          contentFrame.src = "./SCR-01-01.html?logout=1";
+
+        } else if (data.type === "closeApp") {
+          // ログイン画面の「閉じる」→ フレームごと閉じる
+          // まず window.close() を試みる（スクリプトで開いた場合のみ有効）
+          window.close();
+          // ブラウザにブロックされた場合のフォールバック:
+          // 150ms 後もウィンドウが生きていれば、フレーム全体を終了画面に差し替える
+          setTimeout(function () {
+            document.body.innerHTML =
+              '<div style="font-family:system-ui;font-size:16px;padding:40px;text-align:center;color:#fff">' +
+              '<p>アプリを終了しました。<br>このタブを閉じてください。</p>' +
+              '</div>';
+          }, 150);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

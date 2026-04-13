@@ -1,0 +1,334 @@
+:root {
+  --bg: #0e3583;
+  --surface: #3c1414;
+  --surface-alt: #1f4c5b;
+  --surface-raised: #1f4c5b;
+  --text: #fbfbfb;
+  --muted: #ffffff;
+  --accent: #3d9eff;
+  --accent-hover: #5aadff;
+  --danger: #f07178;
+  --radius: 12px;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --touch-min: 44px;
+}
+
+/* ==========
+   Base
+   ========== */
+[hidden] {
+  display: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: radial-gradient(ellipse 120% 80% at 50% -20%, #1e2840 0%, var(--bg) 55%);
+}
+
+body {
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+
+/* ==========
+   Layout
+   ========== */
+.app {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+@media (min-width: 520px) {
+  .card {
+    padding: 24px 28px;
+  }
+}
+
+/* ==========
+   Header
+   ========== */
+
+/*
+ * ヘッダイメージ.png に準拠した2行グリッドレイアウト
+ *
+ *   ┌──────────────┬──────────────┬──────────────┐
+ *   │ ① ユーザー名 │              │ ④ ログアウト  │
+ *   │              │  ③ 画面名    │              │
+ *   │ ② 戻るボタン │              │ ⑤ 追加ボタン  │
+ *   └──────────────┴──────────────┴──────────────┘
+ */
+.top-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "user   title  logout"
+    "nav    title  extra";
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 4px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-user {
+  grid-area: user;
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-min);
+}
+
+.top-logout {
+  grid-area: logout;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: var(--touch-min);
+}
+
+.top-nav {
+  grid-area: nav;
+  display: flex;
+  align-items: center;
+}
+
+.top-extra {
+  grid-area: extra;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.top-title {
+  grid-area: title;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  color: var(--muted);
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========
+   Buttons
+   ========== */
+.btn {
+  border: none;
+  border-radius: var(--radius);
+  min-height: var(--touch-min);
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  min-height: auto;
+  padding: 8px 10px;
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========
+   Common components
+   ========== */
+.error-msg {
+  min-height: 1.3em;
+  text-align: center;
+  margin: 12px 0 0;
+  color: var(--danger);
+  font-size: 0.88rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 2px solid rgb(11, 19, 108);
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  text-align: left;
+  border-top: 2px solid rgb(44, 42, 176);
+  white-space: nowrap;
+}
+
+thead th {
+  border-top: none;
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.btn-detail {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: none;
+  background: var(--surface-raised);
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.btn-detail:hover {
+  background: rgba(61, 158, 255, 0.15);
+}
+
+.detail-rows {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 0.93rem;
+}
+
+.detail-row dt {
+  color: var(--muted);
+  margin: 0;
+  font-weight: 600;
+}
+
+.detail-row dd {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 520px) {
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+.info-text {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* ==========
+   Danger button
+   ========== */
+.btn-danger {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #bf2440;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========
+   Detail page actions
+   ========== */
+.detail-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ==========
+   Confirmation dialog
+   ========== */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.dialog-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.dialog-msg {
+  margin: 0 0 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}

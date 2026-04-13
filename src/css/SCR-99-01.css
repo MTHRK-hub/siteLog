@@ -1,0 +1,31 @@
+.completion-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 16px;
+}
+
+.completion-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(61, 158, 255, 0.15);
+  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.completion-message {
+  margin: 0;
+  font-size: 1.05rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.completion-body .btn {
+  min-width: 160px;
+}

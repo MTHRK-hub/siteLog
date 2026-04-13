@@ -1,0 +1,135 @@
+/*
+ * SCR-00-01 共通ヘッダ スタイル
+ *
+ * 3行 × 3列テーブル構成:
+ *
+ *   col-side(30%) | col-center(40%) | col-side(30%)
+ *   ┌─────────────┬─────────────────┬─────────────┐
+ *   │ ① ユーザー名│  ③ 画面ID(小)  │ ② ログアウト│  行1
+ *   ├─────────────┴─────────────────┴─────────────┤
+ *   │         ④ 画面名(大, colspan=3)              │  行2
+ *   ├─────────────┬─────────────────┬─────────────┤
+ *   │ ⑤ 戻るボタン│                 │ ⑥ 追加ボタン│  行3
+ *   └─────────────┴─────────────────┴─────────────┘
+ */
+
+/* ===========================
+   ヘッダ外枠
+   =========================== */
+.hdr-wrap {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===========================
+   ヘッダテーブル
+   =========================== */
+.header-table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: none;
+  font-size: inherit;
+}
+
+/* colgroup で列幅を明示 (1,4列目:30% / 2,3列目:20%) */
+.header-table .col-side   { width: 35%; }
+.header-table .col-center { width: 15%; }
+
+/* 行1・行3: 均等高さ */
+.hdr-row {
+  height: 33.33%;
+}
+
+/* 行2（画面名行）: 少し高めに */
+.hdr-row-title {
+  height: 34%;
+}
+
+/* common.css の table/td スタイルをリセット */
+.header-table td {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 左列 */
+.hdr-left {
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* 右列 */
+.hdr-right {
+  text-align: right;
+  vertical-align: middle;
+}
+
+/* 中央列（行1・行3） */
+.hdr-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* 行2: 画面名セル（colspan=3 / 縦横中央） */
+.hdr-title {
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px 10px;
+}
+
+/* ===========================
+   中央コンテンツ
+   =========================== */
+
+/* ③ 画面ID（行1中央 / 画面名の半分サイズ） */
+.header-screen-id {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ④ 画面名（行2 / colspan=3 全幅） */
+.header-title {
+  font-size: clamp(1.35rem, 3vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ===========================
+   ① ユーザー名
+   =========================== */
+.user-name {
+  font-size: 0.85rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* ===========================
+   名前リンク（友達一覧・現場記録一覧）
+   =========================== */
+.name-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.name-link:hover {
+  color: var(--accent-hover);
+}

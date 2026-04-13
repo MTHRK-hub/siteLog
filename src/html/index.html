@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>現場記録簿</title>
+</head>
+<body>
+  <p>起動中です...</p>
+  <script>
+    (function () {
+      var W = 850;
+      var H = 1100;
+      // ウィンドウを画面中央に配置
+      var left = Math.max(0, Math.round((screen.width  - W) / 2));
+      var top  = Math.max(0, Math.round((screen.height - H) / 2));
+      var features = [
+        "width="  + W,
+        "height=" + H,
+        "left="   + left,
+        "top="    + top,
+        "resizable=yes",
+        "scrollbars=no"
+      ].join(",");
+
+      var win = window.open("./SCR-00-00.html", "SiteLog", features);
+
+      if (win) {
+        // 新しいウィンドウが開けた場合、このタブを閉じる
+        window.close();
+      } else {
+        // ポップアップがブロックされた場合は同タブで遷移
+        window.location.href = "./SCR-00-00.html";
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+.friend-list-page {
+}
+
+/* テーブル行の色分け（ヘッダ行はそのまま） */
+.friend-list-page tbody tr:nth-child(odd) {
+  background: rgb(52, 54, 22);
+}
+
+.friend-list-page tbody tr:nth-child(even) {
+  background: rgb(49, 56, 20);  
+}
