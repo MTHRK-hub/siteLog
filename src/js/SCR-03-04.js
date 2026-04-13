@@ -25,7 +25,7 @@
       if (el.id !== "btn-edit-cancel") el.disabled = true;
     });
   } else {
-    const friend = found.row;
+    const friend = c.decryptFriendRecord(found.row);
     form.elements["名前"].value = friend["名前"] || "";
     form.elements["LINE名"].value = friend["LINE名"] || "";
     form.elements["生年月日"].value = friend["生年月日"] || "";

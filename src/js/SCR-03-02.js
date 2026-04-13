@@ -12,7 +12,8 @@
   const selectedId = c.getSelectedFriendId();
   const found = selectedId ? c.findFriendById(friends, selectedId) : null;
   const index = found ? found.index : c.getSelectedFriendIndex();
-  const friend = found ? found.row : friends[index];
+  const rawFriend = found ? found.row : friends[index];
+  const friend = rawFriend ? c.decryptFriendRecord(rawFriend) : rawFriend;
 
   if (!friend) {
     c.updateParentHeader({

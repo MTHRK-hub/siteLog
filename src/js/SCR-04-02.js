@@ -11,7 +11,8 @@
   const selectedId = c.getSelectedSiteLogId();
   const found = selectedId ? c.findSiteLogById(rows, selectedId) : null;
   const index = found ? found.index : c.getSelectedSiteLogIndex();
-  const log = found ? found.row : rows[index];
+  const rawLog = found ? found.row : rows[index];
+  const log = rawLog ? c.decryptSiteLogRecord(rawLog) : rawLog;
 
   if (!log) {
     c.updateParentHeader({

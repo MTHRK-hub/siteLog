@@ -10,14 +10,14 @@
   const selectedId = c.getSelectedSiteLogId();
   const found = c.findSiteLogById(rows, selectedId);
 
-  if (!found) {
+  const log = found ? c.decryptSiteLogRecord(found.row) : null;
+
+  if (!log) {
     errorEl.textContent = "編集対象データがありません。";
     form.querySelectorAll("input, select, textarea, button").forEach(function (el) {
       if (el.id !== "btn-edit-cancel") el.disabled = true;
     });
   } else {
-    const log = found.row;
-
     // 項目が MTG/その他 の場合は「出会った相手」を非活性にする
     const selectItem = document.getElementById("select-item");
     const inputPartner = document.getElementById("input-partner");
