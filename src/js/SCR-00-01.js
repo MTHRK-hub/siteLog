@@ -83,7 +83,7 @@
 
     // 上段右: ログアウトボタン
     var logoutHtml = showUser
-      ? '<button type="button" class="btn btn-ghost" id="hdr-btn-logout">ログアウト</button>'
+      ? '<button type="button" class="btn btn-secondary" id="hdr-btn-logout">ログアウト</button>'
       : "";
 
     // 中央: 画面ID (上) + 画面名 (下)
