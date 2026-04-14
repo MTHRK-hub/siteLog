@@ -7,7 +7,7 @@
     users: { gid: "0", name: "ユーザーデータ" },
     friends: { gid: "1058818904", name: "友達情報" },
     siteLogs: { gid: "241811860", name: "現場記録情報" },
-    manuscripts: { gid: "784637613", name: "原稿情報" }
+    manuscripts: { gid: "784637613", name: "メモ情報" }
   };
   // 書き込みAPIのURL（window.SITELOG_WEBAPP_URL または window.SITELOG_FRIENDS_WEBAPP_URL を設定）
   const WRITE_API_URL = (window.SITELOG_WEBAPP_URL || window.SITELOG_FRIENDS_WEBAPP_URL || "");
@@ -187,7 +187,7 @@
         return "取得は成功しましたが、現場記録情報のヘッダ名が一致しません。";
       }
       if (key === "manuscripts" && !("タイトル" in first)) {
-        return "取得は成功しましたが、原稿情報のヘッダ名が一致しません。";
+        return "取得は成功しましたが、メモ情報のヘッダ名が一致しません。";
       }
     }
     if (key === "users") {
@@ -197,7 +197,7 @@
       return "友達情報を取得できません。シート共有設定を確認してください。";
     }
     if (key === "manuscripts") {
-      return "原稿情報を取得できません。シート共有設定を確認してください。";
+      return "メモ情報を取得できません。シート共有設定を確認してください。";
     }
     return "現場記録情報を取得できません。シート共有設定を確認してください。";
   }
@@ -408,7 +408,7 @@
   }
 
   // =========================
-  // 原稿 書き込み
+  // メモ 書き込み
   // =========================
   async function appendManuscript(record) {
     await callWriteApi("appendManuscript", record);
@@ -704,7 +704,7 @@
   }
 
   // =========================
-  // 原稿情報 ストレージ
+  // メモ情報 ストレージ
   // =========================
   function setManuscripts(rows) {
     writeJson(STORAGE_KEYS.manuscripts, rows || []);

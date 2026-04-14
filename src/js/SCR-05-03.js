@@ -2,7 +2,7 @@
   const c = window.SiteLogCommon;
   if (!c.requireLogin()) return;
 
-  c.updateParentHeader({ screenId: "SCR-05-03", title: "原稿登録", showUser: true });
+  c.updateParentHeader({ screenId: "SCR-05-03", title: "メモ登録", showUser: true });
 
   const form = document.getElementById("manuscript-create-form");
   const errorEl = document.getElementById("manuscript-create-error");
@@ -33,7 +33,7 @@
     const record = {
       id: nextId(rows),
       "タイトル": String(fd.get("タイトル") || "").trim(),
-      "原稿": String(fd.get("原稿") || "").trim(),
+      "メモ": String(fd.get("メモ") || "").trim(),
       "ユーザーID": currentUser ? String(currentUser.id || "") : "",
       "最終更新日時": new Date().toISOString().slice(0, 19).replace("T", " ")
     };
@@ -52,8 +52,8 @@
         c.setManuscripts(rows);
         c.setSelectedManuscriptId(record.id);
         c.setCompletionInfo({
-          title: "原稿登録完了",
-          message: "原稿が登録されました。",
+          title: "メモ登録完了",
+          message: "メモが登録されました。",
           buttonLabel: "一覧に戻る",
           backScreen: "manuscriptList"
         });

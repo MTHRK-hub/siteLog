@@ -2,7 +2,7 @@
   const c = window.SiteLogCommon;
   if (!c.requireLogin()) return;
 
-  c.updateParentHeader({ screenId: "SCR-05-04", title: "原稿編集", showUser: true });
+  c.updateParentHeader({ screenId: "SCR-05-04", title: "メモ編集", showUser: true });
 
   const form = document.getElementById("manuscript-edit-form");
   const errorEl = document.getElementById("manuscript-edit-error");
@@ -18,7 +18,7 @@
   } else {
     const manuscript = found.row;
     form.elements["タイトル"].value = manuscript["タイトル"] || "";
-    form.elements["原稿"].value = manuscript["原稿"] || "";
+    form.elements["メモ"].value = manuscript["メモ"] || "";
 
     const confirmDialog = document.getElementById("confirm-dialog");
     const btnConfirmOk = document.getElementById("btn-confirm-ok");
@@ -37,7 +37,7 @@
       const updated = {
         id: c.getManuscriptId(manuscript, found.index),
         "タイトル": String(fd.get("タイトル") || "").trim(),
-        "原稿": String(fd.get("原稿") || "").trim(),
+        "メモ": String(fd.get("メモ") || "").trim(),
         "ユーザーID": currentUser ? String(currentUser.id || "") : "",
         "最終更新日時": new Date().toISOString().slice(0, 19).replace("T", " ")
       };
@@ -56,8 +56,8 @@
           c.setManuscripts(manuscripts);
           c.setSelectedManuscriptId(updated.id);
           c.setCompletionInfo({
-            title: "原稿編集完了",
-            message: "原稿が更新されました。",
+            title: "メモ編集完了",
+            message: "メモが更新されました。",
             buttonLabel: "詳細に戻る",
             backScreen: "manuscriptDetail"
           });

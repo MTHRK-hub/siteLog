@@ -4,7 +4,7 @@
 
   c.updateParentHeader({
     screenId: "SCR-05-01",
-    title: "原稿一覧",
+    title: "メモ一覧",
     back: "menu",
     showUser: true,
     extraId: "btn-manuscript-create",
@@ -38,7 +38,7 @@
   }
 
   (async function init() {
-    status.textContent = "原稿データを読み込み中...";
+    status.textContent = "メモデータを読み込み中...";
     const result = await c.safeLoadSheetRows("manuscripts");
     if (!result.ok) {
       status.textContent = result.message;
@@ -46,7 +46,7 @@
       return;
     }
     c.setManuscripts(result.rows);
-    status.textContent = "原稿データ " + result.rows.length + "件を表示中";
+    status.textContent = "メモデータ " + result.rows.length + "件を表示中";
     render(result.rows);
   })();
 })();

@@ -60,13 +60,13 @@ const SITELOG_HEADERS = [
 ];
 
 // ============================
-// 原稿情報 設定
+// メモ情報 設定
 // ============================
-const MANUSCRIPT_SHEET_NAME = "原稿情報";
+const MANUSCRIPT_SHEET_NAME = "メモ情報";
 const MANUSCRIPT_HEADERS = [
   "id",
   "タイトル",
-  "原稿",
+  "メモ",
   "ユーザーID",
   "最終更新日時"
 ];
@@ -137,7 +137,7 @@ function doPost(e) {
       return jsonOk_({ message: "deleted" });
     }
 
-    // 原稿情報操作
+    // メモ情報操作
     if (action === "appendManuscript") {
       appendManuscript_(payload);
       return jsonOk_({ message: "appended" });
@@ -368,7 +368,7 @@ function deleteSiteLog_(payload) {
 }
 
 // ============================
-// 原稿情報 操作
+// メモ情報 操作
 // ============================
 function appendManuscript_(record) {
   const sheet = getSheet_(MANUSCRIPT_SHEET_NAME);

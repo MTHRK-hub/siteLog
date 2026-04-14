@@ -12,7 +12,7 @@
   if (!manuscript) {
     c.updateParentHeader({
       screenId: "SCR-05-02",
-      title: "原稿詳細",
+      title: "メモ詳細",
       back: "manuscript-list",
       showUser: true,
       extraId: "btn-manuscript-edit",
@@ -26,7 +26,7 @@
 
   c.updateParentHeader({
     screenId: "SCR-05-02",
-    title: "原稿詳細",
+    title: "メモ詳細",
     back: "manuscript-list",
     showUser: true,
     extraId: "btn-manuscript-edit",
@@ -36,5 +36,5 @@
 
   content.innerHTML =
     "<div class='detail-row'><dt>タイトル</dt><dd>" + c.escapeHtml(manuscript["タイトル"]) + "</dd></div>" +
-    "<div class='detail-row'><dt>原稿</dt><dd>" + c.escapeHtml(manuscript["原稿"]) + "</dd></div>";
+    "<div class='detail-row'><dt>メモ</dt><dd>" + c.escapeHtml(manuscript["メモ"]) + "</dd></div>";
 })();
