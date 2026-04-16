@@ -326,6 +326,7 @@
 
   var FRIEND_ENCRYPT_FIELDS = ["名前", "LINE名", "年齢差", "生年月日", "性別", "職業", "出会った日", "出会った場所", "相手の情報", "今後の予定"];
   var SITELOG_ENCRYPT_FIELDS = ["日付", "項目", "出会った相手", "メモ", "ToDo"];
+  var MANUSCRIPT_ENCRYPT_FIELDS = ["タイトル", "メモ"];
 
   function encryptRecord(record, fields) {
     var out = {};
@@ -357,6 +358,14 @@
 
   function decryptSiteLogRecord(record) {
     return decryptRecord(record, SITELOG_ENCRYPT_FIELDS);
+  }
+
+  function encryptManuscriptRecord(record) {
+    return encryptRecord(record, MANUSCRIPT_ENCRYPT_FIELDS);
+  }
+
+  function decryptManuscriptRecord(record) {
+    return decryptRecord(record, MANUSCRIPT_ENCRYPT_FIELDS);
   }
 
   // =========================
@@ -784,6 +793,8 @@
     decryptFriendRecord: decryptFriendRecord,
     encryptSiteLogRecord: encryptSiteLogRecord,
     decryptSiteLogRecord: decryptSiteLogRecord,
+    encryptManuscriptRecord: encryptManuscriptRecord,
+    decryptManuscriptRecord: decryptManuscriptRecord,
     appendUser: appendUser,
     deleteUser: deleteUser,
     updatePassword: updatePassword,

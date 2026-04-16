@@ -12,6 +12,19 @@
   <div class="app">
     <div class="card">
       <dl class="detail-rows" id="manuscript-detail-content"></dl>
+      <div class="detail-actions">
+        <button type="button" class="btn btn-danger" id="btn-manuscript-delete">削除</button>
+      </div>
+      <div id="delete-dialog" class="dialog-overlay" hidden>
+        <div class="dialog-box">
+          <p class="dialog-msg">このメモを削除しますか？</p>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-danger" id="btn-delete-confirm">はい</button>
+            <button type="button" class="btn btn-secondary" id="btn-delete-cancel">キャンセル</button>
+          </div>
+          <p id="delete-error" class="error-msg" role="alert"></p>
+        </div>
+      </div>
     </div>
   </div>
   <script>

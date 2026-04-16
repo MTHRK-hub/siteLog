@@ -37,6 +37,8 @@
     });
   }
 
+  const loginUser = c.getCurrentUser();
+
   (async function init() {
     status.textContent = "メモデータを読み込み中...";
     const result = await c.safeLoadSheetRows("manuscripts");
@@ -45,8 +47,13 @@
       render([]);
       return;
     }
-    c.setManuscripts(result.rows);
-    status.textContent = "メモデータ " + result.rows.length + "件を表示中";
-    render(result.rows);
+    const decryptedRows = result.rows.map(function (r) { return c.decryptManuscriptRecord(r); });
+    c.setManuscripts(decryptedRows);
+    const loginUserId = loginUser && loginUser.id ? String(loginUser.id) : "";
+    const filtered = decryptedRows.filter(function (r) {
+      return String(r["ユーザーID"] || "").trim() === loginUserId;
+    });
+    status.textContent = "メモデータ " + filtered.length + "件を表示中";
+    render(filtered);
   })();
 })();

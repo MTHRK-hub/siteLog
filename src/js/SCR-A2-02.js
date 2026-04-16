@@ -56,7 +56,7 @@
       try {
         const record = {
           "ユーザーID": userId,
-          "パスワード": password,
+          "パスワード": c.encrypt(password),
           "ユーザー名": userName,
           "生年月日": birthDate,
           "管理者フラグ": adminFlag,

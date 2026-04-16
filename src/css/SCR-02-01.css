@@ -20,3 +20,14 @@
   border-color: rgba(61, 158, 255, 0.35);
   color: var(--accent);
 }
+
+.menu-link.menu-link-admin {
+  background: #2c3a50;
+  border-color: rgba(255, 255, 255, 0.06);
+  color: #a0b4cc;
+}
+
+.menu-link.menu-link-admin:hover {
+  border-color: rgba(160, 180, 204, 0.4);
+  color: #c8d8e8;
+}

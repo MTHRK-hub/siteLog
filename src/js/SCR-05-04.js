@@ -51,7 +51,7 @@
       btnConfirmOk.onclick = async function () {
         confirmDialog.setAttribute("hidden", "");
         try {
-          await c.updateManuscript(updated);
+          await c.updateManuscript(c.encryptManuscriptRecord(updated));
           manuscripts[found.index] = updated;
           c.setManuscripts(manuscripts);
           c.setSelectedManuscriptId(updated.id);

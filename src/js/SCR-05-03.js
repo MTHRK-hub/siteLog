@@ -47,7 +47,7 @@
     btnConfirmOk.onclick = async function () {
       confirmDialog.setAttribute("hidden", "");
       try {
-        await c.appendManuscript(record);
+        await c.appendManuscript(c.encryptManuscriptRecord(record));
         rows.push(record);
         c.setManuscripts(rows);
         c.setSelectedManuscriptId(record.id);
