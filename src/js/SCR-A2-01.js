@@ -25,9 +25,17 @@
   const deleteDialogMsg = document.getElementById("delete-dialog-msg");
   const btnDeleteOk = document.getElementById("btn-delete-ok");
   const btnDeleteCancel = document.getElementById("btn-delete-cancel");
+  const resetDialog = document.getElementById("reset-dialog");
+  const resetDialogMsg = document.getElementById("reset-dialog-msg");
+  const btnResetOk = document.getElementById("btn-reset-ok");
+  const btnResetCancel = document.getElementById("btn-reset-cancel");
 
   btnDeleteCancel.addEventListener("click", function () {
     deleteDialog.setAttribute("hidden", "");
+  });
+
+  btnResetCancel.addEventListener("click", function () {
+    resetDialog.setAttribute("hidden", "");
   });
 
   let allRows = [];
@@ -47,8 +55,35 @@
         "<td>" + userId + "</td>" +
         "<td>" + userName + "</td>" +
         "<td>" + badgeHtml + "</td>" +
+        "<td><button type='button' class='btn-reset-row' data-user-id='" + userId + "' data-user-name='" + userName + "'>初期化</button></td>" +
         "<td><button type='button' class='btn-delete-row' data-user-id='" + userId + "' data-user-name='" + userName + "'>削除</button></td>";
       body.appendChild(tr);
+    });
+
+    body.querySelectorAll(".btn-reset-row").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const uid = btn.getAttribute("data-user-id");
+        const uname = btn.getAttribute("data-user-name");
+        resetDialogMsg.textContent = uname + "を初期化しますか？";
+        resetDialog.removeAttribute("hidden");
+
+        btnResetOk.onclick = async function () {
+          resetDialog.setAttribute("hidden", "");
+          status.textContent = "初期化中...";
+          try {
+            await c.resetUserPassword(uid);
+            c.setCompletionInfo({
+              title: "ユーザー初期化完了",
+              message: "ユーザーの初期化が完了しました。",
+              buttonLabel: "一覧に戻る",
+              backScreen: "userCreate"
+            });
+            c.navigate("completion");
+          } catch (err) {
+            status.textContent = err && err.message ? err.message : "初期化に失敗しました。";
+          }
+        };
+      });
     });
 
     body.querySelectorAll(".btn-delete-row").forEach(function (btn) {
@@ -63,8 +98,13 @@
           status.textContent = "削除中...";
           try {
             await c.deleteUser(uid);
-            status.textContent = "削除しました。再読み込み中...";
-            await loadUsers();
+            c.setCompletionInfo({
+              title: "ユーザー削除完了",
+              message: "ユーザーの削除が完了しました。",
+              buttonLabel: "一覧に戻る",
+              backScreen: "userCreate"
+            });
+            c.navigate("completion");
           } catch (err) {
             status.textContent = err && err.message ? err.message : "削除に失敗しました。";
           }

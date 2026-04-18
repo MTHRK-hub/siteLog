@@ -35,7 +35,8 @@
 
     const matched = result.rows.find(function (u) {
       const sheetId = c.normalizeAuthValue(u["ユーザーID"] || u["id"] || u["ID"] || "");
-      const sheetPw = c.normalizeAuthValue(u["パスワード"] || u["password"] || u["PW"] || "");
+      const sheetPwRaw = c.normalizeAuthValue(u["パスワード"] || u["password"] || u["PW"] || "");
+      const sheetPw = c.decrypt(sheetPwRaw);
       return sheetId === String(currentUser.id || "") && sheetPw === currentPw;
     });
 
@@ -73,7 +74,7 @@
       try {
         await c.updatePassword({
           userId: String(currentUser.id || ""),
-          newPassword: newPw
+          newPassword: c.encrypt(newPw)
         });
         c.setCompletionInfo({
           title: "パスワード変更完了",

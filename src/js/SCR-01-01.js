@@ -50,7 +50,8 @@
     const matched = result.rows.find(function (u) {
       // 列名ゆれ（ユーザーID/id 等）を吸収して照合する
       const sheetId = c.normalizeAuthValue(getFirstNonEmpty(u, ["ユーザーID", "id", "ID"]));
-      const sheetPw = c.normalizeAuthValue(getFirstNonEmpty(u, ["パスワード", "password", "PW"]));
+      const sheetPwRaw = c.normalizeAuthValue(getFirstNonEmpty(u, ["パスワード", "password", "PW"]));
+      const sheetPw = c.decrypt(sheetPwRaw);
       return sheetId === id && sheetPw === password;
     });
     if (!matched) {

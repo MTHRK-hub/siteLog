@@ -375,6 +375,13 @@
     await callWriteApi("updatePassword", payload);
   }
 
+  async function resetUserPassword(userId) {
+    await callWriteApi("updatePassword", {
+      userId: String(userId || ""),
+      newPassword: encrypt("resetPass")
+    });
+  }
+
   // =========================
   // ユーザー管理
   // =========================
@@ -798,6 +805,7 @@
     appendUser: appendUser,
     deleteUser: deleteUser,
     updatePassword: updatePassword,
+    resetUserPassword: resetUserPassword,
     calcAge: calcAge,
     escapeHtml: escapeHtml,
     formatDate: formatDate,

@@ -32,17 +32,12 @@
 
     const fd = new FormData(form);
     const userId = String(fd.get("ユーザーID") || "").trim();
-    const password = String(fd.get("パスワード") || "").trim();
     const userName = String(fd.get("ユーザー名") || "").trim();
     const birthDate = String(fd.get("生年月日") || "").trim();
     const adminFlag = String(fd.get("管理者フラグ") || "0").trim();
 
     if (!userId) {
       errorEl.textContent = "ユーザーIDは必須です。";
-      return;
-    }
-    if (!password) {
-      errorEl.textContent = "パスワードは必須です。";
       return;
     }
     if (!userName) {
@@ -54,9 +49,16 @@
     btnConfirmOk.onclick = async function () {
       confirmDialog.setAttribute("hidden", "");
       try {
+        const userResult = await c.safeLoadSheetRows("users");
+        const existingRows = userResult.ok ? userResult.rows : [];
+        const maxId = existingRows.reduce(function (max, row) {
+          const n = parseInt(row.id, 10);
+          return Number.isFinite(n) ? Math.max(max, n) : max;
+        }, 0);
         const record = {
+          id: String(maxId + 1),
           "ユーザーID": userId,
-          "パスワード": c.encrypt(password),
+          "パスワード": c.encrypt("newPass"),
           "ユーザー名": userName,
           "生年月日": birthDate,
           "管理者フラグ": adminFlag,

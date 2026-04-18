@@ -16,6 +16,7 @@ const USER_SHEET_NAME = "ユーザー情報";
 const USER_ID_COL = "ユーザーID";
 const USER_PW_COL = "パスワード";
 const USER_HEADERS = [
+  "id",
   "ユーザーID",
   "パスワード",
   "ユーザー名",
@@ -206,22 +207,25 @@ function updatePassword_(payload) {
 // ユーザー管理
 // ============================
 function appendUser_(record) {
-  const ssId = PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID");
-  if (!ssId) throw new Error("SPREADSHEET_ID is not set");
-  const ss = SpreadsheetApp.openById(ssId);
-  const sheet = ss.getSheetByName(USER_SHEET_NAME);
-  if (!sheet) throw new Error("sheet not found: " + USER_SHEET_NAME);
+  const sheet = getSheet_(USER_SHEET_NAME);
+  ensureHeader_(sheet, USER_HEADERS);
+
+  const id = normalize_(record.id);
+  if (!id) throw new Error("id is required");
 
   const userId = normalize_(record[USER_ID_COL]);
   if (!userId) throw new Error("ユーザーID is required");
 
-  // 重複チェック
+  // id 重複チェック
+  const existingIds = getExistingIds_(sheet);
+  if (existingIds.has(id)) throw new Error("id already exists: " + id);
+
+  // ユーザーID 重複チェック
   const lastRow = sheet.getLastRow();
   if (lastRow >= 2) {
-    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-    const idColIdx = headers.findIndex(function (h) { return normalize_(h) === USER_ID_COL; });
-    if (idColIdx >= 0) {
-      const ids = sheet.getRange(2, idColIdx + 1, lastRow - 1, 1).getValues();
+    const userIdColIdx = USER_HEADERS.indexOf(USER_ID_COL);
+    if (userIdColIdx >= 0) {
+      const ids = sheet.getRange(2, userIdColIdx + 1, lastRow - 1, 1).getValues();
       for (let i = 0; i < ids.length; i++) {
         if (normalize_(ids[i][0]) === userId) {
           throw new Error("ユーザーID already exists: " + userId);
@@ -231,18 +235,12 @@ function appendUser_(record) {
   }
 
   record["最終更新日時"] = currentTimestamp_();
-  // ヘッダに合わせて行を構築
-  const headers = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), USER_HEADERS.length)).getValues()[0];
-  const row = headers.map(function (h) { return normalize_(record[h] != null ? record[h] : ""); });
-  sheet.appendRow(row);
+  sheet.appendRow(toRow_(record, USER_HEADERS));
 }
 
 function deleteUser_(payload) {
-  const ssId = PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID");
-  if (!ssId) throw new Error("SPREADSHEET_ID is not set");
-  const ss = SpreadsheetApp.openById(ssId);
-  const sheet = ss.getSheetByName(USER_SHEET_NAME);
-  if (!sheet) throw new Error("sheet not found: " + USER_SHEET_NAME);
+  const sheet = getSheet_(USER_SHEET_NAME);
+  ensureHeader_(sheet, USER_HEADERS);
 
   const userId = normalize_(payload.id);
   if (!userId) throw new Error("id is required");
@@ -250,11 +248,8 @@ function deleteUser_(payload) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) throw new Error("no user data found");
 
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  const idColIdx = headers.findIndex(function (h) { return normalize_(h) === USER_ID_COL; });
-  if (idColIdx < 0) throw new Error("column not found: " + USER_ID_COL);
-
-  const ids = sheet.getRange(2, idColIdx + 1, lastRow - 1, 1).getValues();
+  const userIdColIdx = USER_HEADERS.indexOf(USER_ID_COL);
+  const ids = sheet.getRange(2, userIdColIdx + 1, lastRow - 1, 1).getValues();
   let targetRow = -1;
   for (let i = 0; i < ids.length; i++) {
     if (normalize_(ids[i][0]) === userId) {

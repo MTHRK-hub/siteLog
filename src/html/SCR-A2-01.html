@@ -19,6 +19,7 @@
               <th>ユーザーID</th>
               <th>ユーザー名</th>
               <th>管理権限</th>
+              <th>初期化</th>
               <th>削除</th>
             </tr>
           </thead>
@@ -35,6 +36,17 @@
       <div class="dialog-actions">
         <button type="button" class="btn btn-danger" id="btn-delete-ok">はい</button>
         <button type="button" class="btn btn-secondary" id="btn-delete-cancel">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 初期化確認ダイアログ -->
+  <div id="reset-dialog" class="dialog-overlay" hidden>
+    <div class="dialog-box">
+      <p class="dialog-msg" id="reset-dialog-msg"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-danger" id="btn-reset-ok">はい</button>
+        <button type="button" class="btn btn-secondary" id="btn-reset-cancel">キャンセル</button>
       </div>
     </div>
   </div>
