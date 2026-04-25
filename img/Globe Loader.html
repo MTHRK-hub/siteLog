@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Globe Loader</title>
+<style>
+  :root {
+    --bg: #f3f1ec;
+    --ink: #141414;
+    --ink-soft: #141414;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  body {
+    display: grid;
+    place-items: center;
+  }
+  .stage {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  /* The whirl: dashed concentric arcs that rotate at different speeds */
+  .whirl {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .whirl svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .whirl .ring-a { animation: spinCW 3.6s linear infinite; transform-origin: 100px 100px; }
+  .whirl .ring-b { animation: spinCCW 5.2s linear infinite; transform-origin: 100px 100px; }
+  .whirl .ring-c { animation: spinCW 7.8s linear infinite; transform-origin: 100px 100px; }
+  .whirl .spark  { animation: spinCW 2.4s linear infinite; transform-origin: 100px 100px; }
+
+  @keyframes spinCW  { to { transform: rotate(360deg); } }
+  @keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+  .globe {
+    width: 120px;
+    height: 120px;
+    position: relative;
+  }
+  .globe canvas {
+    width: 120px;
+    height: 120px;
+    display: block;
+    /* subtle vignette to read as a sphere */
+    border-radius: 50%;
+  }
+  /* faint inner shadow to give it dimension without color */
+  .globe::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow:
+      inset -8px -10px 18px rgba(20,20,20,0.18),
+      inset 6px 6px 14px rgba(255,255,255,0.35);
+    pointer-events: none;
+  }
+  /* hairline horizon */
+  .globe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(20,20,20,0.55);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" role="status" aria-label="Loading">
+    <!-- Whirl: three dashed rings + a few orbiting sparks -->
+    <div class="whirl">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <!-- arcs are drawn as full circles with stroke-dasharray to make broken sweeps -->
+        </defs>
+        <!-- Ring A: outermost, long sweep -->
+        <g class="ring-a">
+          <circle cx="100" cy="100" r="96"
+                  fill="none" stroke="#141414" stroke-width="1"
+                  stroke-dasharray="170 432" stroke-linecap="round" opacity="0.9"/>
+          <circle cx="100" cy="100" r="96"
+                  fill="none" stroke="#141414" stroke-width="1"
+                  stroke-dasharray="40 562" stroke-dashoffset="-220"
+                  stroke-linecap="round" opacity="0.55"/>
+        </g>
+        <!-- Ring B: mid, fine dashes -->
+        <g class="ring-b">
+          <circle cx="100" cy="100" r="86"
+                  fill="none" stroke="#141414" stroke-width="0.75"
+                  stroke-dasharray="2 6" opacity="0.7"/>
+          <circle cx="100" cy="100" r="86"
+                  fill="none" stroke="#141414" stroke-width="1.25"
+                  stroke-dasharray="60 480" stroke-linecap="round" opacity="0.9"/>
+        </g>
+        <!-- Ring C: innermost halo, just outside the globe edge -->
+        <g class="ring-c">
+          <circle cx="100" cy="100" r="74"
+                  fill="none" stroke="#141414" stroke-width="0.75"
+                  stroke-dasharray="120 340" stroke-linecap="round" opacity="0.8"/>
+        </g>
+        <!-- Sparks: tiny dots orbiting just outside the globe -->
+        <g class="spark">
+          <circle cx="100" cy="18" r="1.6" fill="#141414"/>
+          <circle cx="182" cy="100" r="1.1" fill="#141414" opacity="0.7"/>
+          <circle cx="100" cy="182" r="0.9" fill="#141414" opacity="0.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Globe: real country outlines projected with D3 -->
+    <div class="globe">
+      <canvas id="globe" width="240" height="240"></canvas>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+(async () => {
+  const canvas = document.getElementById('globe');
+  const ctx = canvas.getContext('2d');
+  // Render at 2x for crispness
+  const SIZE = 120;
+  const DPR = 2;
+  canvas.width = SIZE * DPR;
+  canvas.height = SIZE * DPR;
+  ctx.scale(DPR, DPR);
+
+  // Orthographic projection — true globe, not a flat map
+  const projection = d3.geoOrthographic()
+    .scale(SIZE / 2 - 2)
+    .translate([SIZE / 2, SIZE / 2])
+    .clipAngle(90);
+
+  const path = d3.geoPath(projection, ctx);
+
+  // Load world topojson (countries) — Natural Earth via world-atlas
+  let land, countries, graticule;
+  try {
+    const res = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json');
+    const topo = await res.json();
+    countries = topojson.feature(topo, topo.objects.countries);
+    land = topojson.merge(topo, topo.objects.countries.geometries);
+  } catch (e) {
+    console.error('Failed to load topojson', e);
+  }
+
+  graticule = d3.geoGraticule10();
+
+  const INK = '#141414';
+  const SPHERE = { type: 'Sphere' };
+
+  let lambda = 0; // longitude rotation
+  const phi = -8; // slight tilt for character
+
+  function draw() {
+    ctx.clearRect(0, 0, SIZE, SIZE);
+    projection.rotate([lambda, phi, 0]);
+
+    // Disc fill (off-white that matches bg, so countries appear as line art on the sphere)
+    ctx.beginPath();
+    path(SPHERE);
+    ctx.fillStyle = '#f3f1ec';
+    ctx.fill();
+
+    // Graticule: very faint
+    ctx.beginPath();
+    path(graticule);
+    ctx.lineWidth = 0.4;
+    ctx.strokeStyle = 'rgba(20,20,20,0.22)';
+    ctx.stroke();
+
+    if (countries) {
+      // Country borders
+      ctx.beginPath();
+      path(countries);
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = 'rgba(20,20,20,0.55)';
+      ctx.stroke();
+    }
+
+    if (land) {
+      // Land fill on top — solid ink so continents read clearly at 120px
+      ctx.beginPath();
+      path(land);
+      ctx.fillStyle = INK;
+      ctx.fill();
+    }
+
+    // Sphere outline
+    ctx.beginPath();
+    path(SPHERE);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = INK;
+    ctx.stroke();
+  }
+
+  let last = performance.now();
+  function tick(now) {
+    const dt = (now - last) / 1000;
+    last = now;
+    // ~ one rotation every 8s
+    lambda = (lambda + dt * 45) % 360;
+    draw();
+    requestAnimationFrame(tick);
+  }
+  draw();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
