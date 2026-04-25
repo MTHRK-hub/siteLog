@@ -49,7 +49,7 @@
 
   function initGlobe() {
     var ctx = canvas.getContext('2d');
-    var SIZE = 84, DPR = window.devicePixelRatio || 2;
+    var SIZE = 54, DPR = window.devicePixelRatio || 2;
     canvas.width = SIZE * DPR;
     canvas.height = SIZE * DPR;
     ctx.scale(DPR, DPR);

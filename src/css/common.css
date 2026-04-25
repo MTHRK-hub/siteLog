@@ -352,8 +352,8 @@ thead th {
 }
 
 .globe-stage {
-  width: 140px;
-  height: 140px;
+  width: 90px;
+  height: 90px;
   position: relative;
   display: grid;
   place-items: center;
@@ -374,23 +374,23 @@ thead th {
   overflow: visible;
 }
 
-.globe-ring-a { animation: globeSpinCW 3.6s linear infinite; transform-origin: 70px 70px; }
-.globe-ring-b { animation: globeSpinCCW 5.2s linear infinite; transform-origin: 70px 70px; }
-.globe-ring-c { animation: globeSpinCW 7.8s linear infinite; transform-origin: 70px 70px; }
-.globe-spark  { animation: globeSpinCW 2.4s linear infinite; transform-origin: 70px 70px; }
+.globe-ring-a { animation: globeSpinCW 3.6s linear infinite; transform-origin: 45px 45px; }
+.globe-ring-b { animation: globeSpinCCW 5.2s linear infinite; transform-origin: 45px 45px; }
+.globe-ring-c { animation: globeSpinCW 7.8s linear infinite; transform-origin: 45px 45px; }
+.globe-spark  { animation: globeSpinCW 2.4s linear infinite; transform-origin: 45px 45px; }
 
 @keyframes globeSpinCW  { to { transform: rotate(360deg); } }
 @keyframes globeSpinCCW { to { transform: rotate(-360deg); } }
 
 .globe-canvas-wrap {
-  width: 84px;
-  height: 84px;
+  width: 54px;
+  height: 54px;
   position: relative;
 }
 
 .globe-canvas {
-  width: 84px;
-  height: 84px;
+  width: 54px;
+  height: 54px;
   display: block;
   border-radius: 50%;
 }
