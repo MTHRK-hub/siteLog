@@ -6,7 +6,8 @@
   --text: #fbfbfb;
   --muted: #ffffff;
   --accent: #ffffff;
-  --accent-login: #1c0b7b;
+  --accent-login: #0c2d71;
+  --accent-bar: #0e3583;
   --accent-hover: #5aadff;
   --danger: #f07178;
   --radius: 12px;
@@ -269,7 +270,7 @@ thead th {
 }
 
 .detail-row dt {
-  background: var(--accent);
+  background: var(--accent-bar);
   color: #ffffff;
   margin: 0;
   font-weight: 600;
