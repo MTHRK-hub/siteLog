@@ -30,6 +30,21 @@ html::before {
   inset: 0;
   background: url("../../img/background.png") center / cover no-repeat;
   z-index: -1;
+  /* フレーム縁のみ表示し、内側を透明に切り抜く */
+  mask-image:
+    linear-gradient(black, black),
+    linear-gradient(black, black);
+  mask-size: 100% 100%, calc(100% - 50px) calc(100% - 50px);
+  mask-position: center, center;
+  mask-repeat: no-repeat, no-repeat;
+  mask-composite: exclude;
+  -webkit-mask-image:
+    linear-gradient(black, black),
+    linear-gradient(black, black);
+  -webkit-mask-size: 100% 100%, calc(100% - 50px) calc(100% - 50px);
+  -webkit-mask-position: center, center;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: destination-out;
 }
 
 html,
