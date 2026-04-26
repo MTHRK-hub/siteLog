@@ -166,7 +166,7 @@ body {
   border-radius: var(--radius);
   min-height: var(--touch-min);
   padding: 10px 14px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -368,7 +368,7 @@ thead th {
 
 .globe-stage {
   width: 90px;
-  height: 90px;
+  height: 70px;
   position: relative;
   display: grid;
   place-items: center;
