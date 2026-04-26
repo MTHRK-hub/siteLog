@@ -1,8 +1,8 @@
 /* テーブル行の色分け（ヘッダ行はそのまま） */
 .manuscript-list-page tbody tr:nth-child(odd) {
-  background: rgb(22, 35, 54);
+  background: rgb(59, 50, 27);
 }
 
 .manuscript-list-page tbody tr:nth-child(even) {
-  background: rgb(20, 42, 60);
+  background: rgb(43, 30, 14);
 }

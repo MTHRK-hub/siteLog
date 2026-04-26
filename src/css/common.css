@@ -5,7 +5,7 @@
   --surface-raised: #1f4c5b;
   --text: #fbfbfb;
   --muted: #ffffff;
-  --accent: #2e70b3;
+  --accent: #ffffff;
   --accent-hover: #5aadff;
   --danger: #f07178;
   --radius: 12px;
@@ -361,14 +361,15 @@ thead th {
   right: 0;
   display: flex;
   justify-content: center;
-  padding: 5px 0 5px;
+  align-items: flex-start;
+  padding: 0 0 5px;
   opacity: 0.8;
   pointer-events: none;
 }
 
 .globe-stage {
   width: 90px;
-  height: 70px;
+  height: 60px;
   position: relative;
   display: grid;
   place-items: center;

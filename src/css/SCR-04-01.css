@@ -1,8 +1,8 @@
 /* テーブル行の色分け（ヘッダ行はそのまま） */
 .site-list-page tbody tr:nth-child(odd) {
-  background: rgb(52, 54, 22);
+  background: rgb(72, 48, 77);
 }
 
 .site-list-page tbody tr:nth-child(even) {
-  background: rgb(49, 56, 20);
+  background: rgb(56, 20, 51);
 }
