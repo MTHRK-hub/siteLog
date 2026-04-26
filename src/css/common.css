@@ -57,8 +57,8 @@ body {
 }
 
 body {
-  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  padding: max(12px, env(safe-area-inset-top)) max(3px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(3px, env(safe-area-inset-left));
 }
 
 /* ==========
@@ -165,7 +165,7 @@ body {
   border: none;
   border-radius: var(--radius);
   min-height: var(--touch-min);
-  padding: 10px 14px;
+  padding: 5px 7px;
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
@@ -173,7 +173,7 @@ body {
 
 .btn-primary {
   background: var(--accent);
-  color: #ffffff;
+  color: #def8cb;
 }
 
 .btn-primary:hover {
