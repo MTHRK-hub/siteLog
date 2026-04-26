@@ -6,6 +6,7 @@
   --text: #fbfbfb;
   --muted: #ffffff;
   --accent: #ffffff;
+  --accent-login: #1c0b7b;
   --accent-hover: #5aadff;
   --danger: #f07178;
   --radius: 12px;
@@ -172,7 +173,7 @@ body {
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--accent-login);
   color: #def8cb;
 }
 
