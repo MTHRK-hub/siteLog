@@ -73,7 +73,6 @@
     row("日付", c.formatDate(project["日付"])) +
     row("時間", project["時間"]) +
     buildLocationRow(project["場所"], project["場所URL"]) +
-    row("場所URL", project["場所URL"]) +
     row("内容", project["内容"]) +
     row("説明", project["説明"]) +
     feeRow;

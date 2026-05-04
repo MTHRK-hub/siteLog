@@ -543,8 +543,28 @@
     await callWriteApi("deleteEvent", { id: id });
   }
 
+  async function updateEvent(record) {
+    await callWriteApi("updateEvent", record);
+  }
+
   async function updateEventHideFlag(id) {
     await callWriteApi("updateEventHideFlag", { id: String(id || "") });
+  }
+
+  function getEventId(event, fallbackIndex) {
+    if (!event) return "";
+    const raw = event.id != null && String(event.id).trim() !== "" ? event.id : (fallbackIndex + 1);
+    return normalizeAuthValue(raw);
+  }
+
+  function findEventById(rows, id) {
+    const normId = normalizeAuthValue(id);
+    if (!normId) return null;
+    const index = rows.findIndex(function (row, idx) {
+      return getEventId(row, idx) === normId;
+    });
+    if (index < 0) return null;
+    return { index: index, row: rows[index] };
   }
 
   // =========================
@@ -740,7 +760,9 @@
     cashflowCreate: "SCR-07-02.html",
     cashflowEdit: "SCR-07-03.html",
     eventList: "SCR-08-01.html",
-    eventDetail: "SCR-08-02.html"
+    eventDetail: "SCR-08-02.html",
+    eventCreate: "SCR-08-03.html",
+    eventEdit: "SCR-08-04.html"
   };
 
   function navigate(screen) {
@@ -1104,7 +1126,10 @@
     setSelectedEventId: setSelectedEventId,
     getSelectedEventId: getSelectedEventId,
     appendEvent: appendEvent,
+    updateEvent: updateEvent,
     deleteEvent: deleteEvent,
-    updateEventHideFlag: updateEventHideFlag
+    updateEventHideFlag: updateEventHideFlag,
+    getEventId: getEventId,
+    findEventById: findEventById
   };
 })();

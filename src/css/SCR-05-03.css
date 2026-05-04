@@ -33,6 +33,12 @@
   border-color: var(--accent);
 }
 
+.manuscript-form-page .title-inputs {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+}
+
 .form-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;

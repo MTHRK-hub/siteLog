@@ -17,7 +17,9 @@
     });
   } else {
     const manuscript = found.row;
-    form.elements["タイトル"].value = manuscript["タイトル"] || "";
+    const titleMatch = /^【(.*)】(.*)$/.exec(manuscript["タイトル"] || "");
+    form.elements["小見出し"].value = titleMatch ? titleMatch[1] : "";
+    form.elements["大見出し"].value = titleMatch ? titleMatch[2] : (manuscript["タイトル"] || "");
     form.elements["メモ"].value = manuscript["メモ"] || "";
 
     const confirmDialog = document.getElementById("confirm-dialog");
@@ -34,16 +36,18 @@
 
       const fd = new FormData(form);
       const currentUser = c.getCurrentUser();
+      const small = String(fd.get("小見出し") || "").trim();
+      const large = String(fd.get("大見出し") || "").trim();
       const updated = {
         id: c.getManuscriptId(manuscript, found.index),
-        "タイトル": String(fd.get("タイトル") || "").trim(),
+        "タイトル": small ? "【" + small + "】" + large : large,
         "メモ": String(fd.get("メモ") || "").trim(),
         "ユーザーID": currentUser ? String(currentUser.id || "") : "",
         "最終更新日時": new Date().toISOString().slice(0, 19).replace("T", " ")
       };
 
       if (!updated["タイトル"]) {
-        errorEl.textContent = "タイトルは必須です。";
+        errorEl.textContent = "大見出しは必須です。";
         return;
       }
 

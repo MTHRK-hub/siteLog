@@ -9,7 +9,7 @@
     showUser: true,
     extraId: "btn-event-create",
     extraLabel: "新規作成",
-    extraEnabled: false
+    extraScreen: "eventCreate"
   });
 
   const status = document.getElementById("event-load-status");
@@ -26,6 +26,7 @@
   const btnDeleteCancel = document.getElementById("btn-delete-cancel");
 
   let allEvents = [];
+  let allEventsIncludingHidden = [];
   const loginUser = c.getCurrentUser();
   const loginUserId = loginUser ? String(loginUser.id || "").trim() : "";
 
@@ -73,22 +74,22 @@
   }
 
   function renderContent(filterYm) {
-    const nonHiddenEvents = allEvents.filter(function (r) {
-      const flag = String(r["非表示フラグ"] || "").trim();
-      return flag !== "1" && flag.toUpperCase() !== "TRUE";
-    });
     const baseRows = filterYm
-      ? nonHiddenEvents.filter(function (r) {
+      ? allEvents.filter(function (r) {
           return getEventYm(r["日付"] || "") === filterYm;
         })
-      : nonHiddenEvents;
+      : allEvents;
 
     const participationRows = baseRows.filter(function (r) {
       return String(r["参加フラグ"] || "").trim() === "1";
     });
 
     if (filterYm) {
-      const totalFee = calcTotalFee(participationRows);
+      const feeTargetRows = allEventsIncludingHidden.filter(function (r) {
+        return getEventYm(r["日付"] || "") === filterYm &&
+          String(r["参加フラグ"] || "").trim() === "1";
+      });
+      const totalFee = calcTotalFee(feeTargetRows);
       feeTotalRow.textContent = filterYm.replace(/^(\d{4})-0?(\d+)$/, "$1年$2月") +
         " 合計参加費 ￥" + totalFee.toLocaleString("ja-JP");
       feeTotalRow.hidden = false;
@@ -189,14 +190,10 @@
           return String(r["ユーザーID"] || "").trim() === loginUserId;
         })
       : result.rows;
-    const visible = filtered.filter(function (r) {
-      const flag = String(r["非表示フラグ"] || "").trim();
-      return flag !== "1" && flag.toUpperCase() !== "TRUE";
-    });
-    allEvents = visible.map(function (r) {
+    const allDecrypted = filtered.map(function (r) {
       return c.decryptEventRecord(r);
     });
-    allEvents.sort(function (a, b) {
+    allDecrypted.sort(function (a, b) {
       const dateA = String(a["日付"] || "");
       const dateB = String(b["日付"] || "");
       if (dateA !== dateB) return dateA.localeCompare(dateB);
@@ -204,7 +201,12 @@
       const timeB = String(b["時間"] || "").split(/[~〜]/)[0].trim() || "00:00";
       return timeA.localeCompare(timeB);
     });
-    c.setEvents(allEvents);
+    allEventsIncludingHidden = allDecrypted;
+    allEvents = allDecrypted.filter(function (r) {
+      const flag = String(r["非表示フラグ"] || "").trim();
+      return flag !== "1" && flag.toUpperCase() !== "TRUE";
+    });
+    c.setEvents(allDecrypted);
     status.textContent = "";
     buildMonthOptions();
     renderContent(monthFilter.value);

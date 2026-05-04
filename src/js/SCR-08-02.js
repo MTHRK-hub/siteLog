@@ -11,7 +11,8 @@
     showUser: true,
     extraId: "btn-event-edit",
     extraLabel: "編集",
-    extraEnabled: false
+    extraScreen: "eventEdit",
+    extraEnabled: true
   });
 
   const events = c.getEvents();
@@ -30,11 +31,12 @@
       "</dt><dd>" + c.escapeHtml(value || "") + "</dd></div>";
   }
 
-  function urlRow(label, url) {
+  function eventNameRow(name, url) {
     const u = String(url || "").trim();
-    if (!u) return row(label, "");
-    return "<div class='detail-row'><dt>" + c.escapeHtml(label) +
-      '</dt><dd><a href="' + c.escapeHtml(u) + '" target="_blank" rel="noopener">' + c.escapeHtml(u) + "</a></dd></div>";
+    if (!u) return row("イベント名", name);
+    return "<div class='detail-row'><dt>イベント名</dt><dd>" +
+      '<a href="' + c.escapeHtml(u) + '" target="_blank" rel="noopener">' +
+      c.escapeHtml(String(name || "")) + "</a></dd></div>";
   }
 
   const participation = String(event["参加フラグ"] || "").trim() === "1" ? "参加" : "不参加";
@@ -44,8 +46,7 @@
     row("時間", event["時間"]) +
     row("項目", event["項目"]) +
     row("場所", event["場所"]) +
-    row("イベント名", event["イベント名"]) +
+    eventNameRow(event["イベント名"], event["URL"]) +
     row("参加費", event["参加費"]) +
-    urlRow("URL", event["URL"]) +
     row("参加/不参加", participation);
 })();

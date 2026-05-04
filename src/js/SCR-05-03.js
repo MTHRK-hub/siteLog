@@ -30,16 +30,18 @@
     const rows = c.getManuscripts();
     const fd = new FormData(form);
     const currentUser = c.getCurrentUser();
+    const small = String(fd.get("小見出し") || "").trim();
+    const large = String(fd.get("大見出し") || "").trim();
     const record = {
       id: nextId(rows),
-      "タイトル": String(fd.get("タイトル") || "").trim(),
+      "タイトル": small ? "【" + small + "】" + large : large,
       "メモ": String(fd.get("メモ") || "").trim(),
       "ユーザーID": currentUser ? String(currentUser.id || "") : "",
       "最終更新日時": new Date().toISOString().slice(0, 19).replace("T", " ")
     };
 
     if (!record["タイトル"]) {
-      errorEl.textContent = "タイトルは必須です。";
+      errorEl.textContent = "大見出しは必須です。";
       return;
     }
 

@@ -12,7 +12,12 @@
   <div class="app">
     <div class="card">
       <form id="manuscript-edit-form" class="form-grid" novalidate>
-        <label>タイトル<input name="タイトル" required /></label>
+        <label>タイトル
+          <div class="title-inputs">
+            <input name="小見出し" placeholder="小見出し" />
+            <input name="大見出し" placeholder="大見出し" required />
+          </div>
+        </label>
         <label>メモ<textarea name="メモ"></textarea></label>
         <p id="manuscript-edit-error" class="error-msg" role="alert"></p>
         <div class="form-actions">

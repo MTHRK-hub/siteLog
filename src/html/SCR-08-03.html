@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿 - イベント登録</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/SCR-00-01.css" />
+  <link rel="stylesheet" href="../css/SCR-08-03.css" />
+</head>
+<body class="event-form-page">
+  <div class="app">
+    <div class="card">
+      <form id="event-create-form" class="form-grid" novalidate>
+        <label>日付<input type="date" name="日付" required /></label>
+        <label>時間
+          <div class="time-range">
+            <input type="time" name="時間From" />
+            <span class="time-separator">～</span>
+            <input type="time" name="時間To" />
+          </div>
+        </label>
+        <label>項目
+          <select name="項目" id="select-item">
+            <option value=""></option>
+          </select>
+        </label>
+        <label>場所<input name="場所" /></label>
+        <label>イベント名<input name="イベント名" required /></label>
+        <label>参加費<input name="参加費" /></label>
+        <label>URL<input name="URL" /></label>
+        <fieldset class="radio-fieldset">
+          <legend>参加/不参加</legend>
+          <label class="radio-label"><input type="radio" name="参加フラグ" value="0" checked />不参加</label>
+          <label class="radio-label"><input type="radio" name="参加フラグ" value="1" />参加</label>
+        </fieldset>
+        <p id="event-create-error" class="error-msg" role="alert"></p>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">登録</button>
+          <button type="button" class="btn btn-secondary" id="btn-create-cancel">キャンセル</button>
+        </div>
+      </form>
+      <div id="confirm-dialog" class="dialog-overlay" hidden>
+        <div class="dialog-box">
+          <p class="dialog-msg">登録しますか？</p>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-primary" id="btn-confirm-ok">はい</button>
+            <button type="button" class="btn btn-secondary" id="btn-confirm-cancel">キャンセル</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.SITELOG_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzslsgfnlEFzyDA6W4ysgPJYz8w2PDOG_bCZh5qCy7lQvnfyYa9rR-kkLZGGXENb81D/exec";
+  </script>
+  <script src="../js/common.js"></script>
+  <script src="../js/SCR-08-03.js"></script>
+</body>
+</html>
