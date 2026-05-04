@@ -42,6 +42,21 @@
     form.elements["時間From"].value = timeParts[0] ? timeParts[0].trim() : "";
     form.elements["時間To"].value = timeParts[1] ? timeParts[1].trim() : "";
     form.elements["場所"].value = event["場所"] || "";
+
+    // 前後のイベントの時間を取得してmin/maxを設定
+    const eventDate = event["日付"] || "";
+    const prevEvent = found.index > 0 ? events[found.index - 1] : null;
+    const nextEvent = found.index < events.length - 1 ? events[found.index + 1] : null;
+    function splitTime(timeStr) {
+      const p = String(timeStr || "").split(/[~〜～]/);
+      return { from: (p[0] || "").trim(), to: (p[1] || "").trim() };
+    }
+    const prevEndTime = prevEvent && (prevEvent["日付"] || "") === eventDate
+      ? splitTime(prevEvent["時間"]).to : "";
+    const nextStartTime = nextEvent && (nextEvent["日付"] || "") === eventDate
+      ? splitTime(nextEvent["時間"]).from : "";
+    if (prevEndTime) form.elements["時間From"].min = prevEndTime;
+    if (nextStartTime) form.elements["時間To"].max = nextStartTime;
     form.elements["イベント名"].value = event["イベント名"] || "";
     form.elements["参加費"].value = event["参加費"] || "";
     form.elements["URL"].value = event["URL"] || "";

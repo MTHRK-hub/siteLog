@@ -26,6 +26,21 @@
     form.elements["時間To"].value = timeParts[1] ? timeParts[1].trim() : "";
     form.elements["場所"].value = project["場所"] || "";
     form.elements["場所URL"].value = project["場所URL"] || "";
+
+    // 前後の企画の時間を取得してmin/maxを設定
+    const projectDate = project["日付"] || "";
+    const prevProject = found.index > 0 ? rows[found.index - 1] : null;
+    const nextProject = found.index < rows.length - 1 ? rows[found.index + 1] : null;
+    function splitTime(timeStr) {
+      const p = String(timeStr || "").split(/[~〜～]/);
+      return { from: (p[0] || "").trim(), to: (p[1] || "").trim() };
+    }
+    const prevEndTime = prevProject && (prevProject["日付"] || "") === projectDate
+      ? splitTime(prevProject["時間"]).to : "";
+    const nextStartTime = nextProject && (nextProject["日付"] || "") === projectDate
+      ? splitTime(nextProject["時間"]).from : "";
+    if (prevEndTime) form.elements["時間From"].min = prevEndTime;
+    if (nextStartTime) form.elements["時間To"].max = nextStartTime;
     form.elements["内容"].value = project["内容"] || "";
     form.elements["説明"].value = project["説明"] || "";
     form.elements["男性参加費"].value = project["男性参加費"] || "";
