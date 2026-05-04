@@ -110,7 +110,7 @@
     } else {
       listBody.innerHTML = displayRows.map(function (r) {
         return "<tr>" +
-          "<td>" + c.escapeHtml(r["日付"] || "") + "</td>" +
+          "<td>" + c.escapeHtml(c.formatDate(r["日付"])) + "</td>" +
           "<td>" + c.escapeHtml(r["時間"] || "") + "</td>" +
           "<td>" + c.escapeHtml(r["イベント名"] || "") + "</td>" +
           "<td><button type='button' class='btn btn-sm btn-secondary btn-event-detail' data-eid='" + c.escapeHtml(String(r.id || "")) + "'>詳細</button></td>" +

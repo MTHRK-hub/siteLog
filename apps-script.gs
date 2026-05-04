@@ -246,6 +246,10 @@ function doPost(e) {
       updateEventHideFlag_(payload);
       return jsonOk_({ message: "updated" });
     }
+    if (action === "updateEvent") {
+      updateEvent_(payload);
+      return jsonOk_({ message: "updated" });
+    }
 
     // ユーザーメッセージ更新
     if (action === "updateUserMessage") {
@@ -757,6 +761,21 @@ function updateEventHideFlag_(payload) {
   if (tsColIdx >= 0) {
     sheet.getRange(rowIndex, tsColIdx + 1).setValue(currentTimestamp_());
   }
+}
+
+function updateEvent_(record) {
+  const sheet = getSheet_(EVENT_SHEET_NAME);
+  ensureHeader_(sheet, EVENT_HEADERS);
+
+  const id = normalize_(record.id);
+  if (!id) throw new Error("id is required");
+  if (!normalize_(record["日付"])) throw new Error("日付 is required");
+
+  const rowIndex = findRowById_(sheet, id);
+  if (rowIndex < 0) throw new Error("target id not found: " + id);
+
+  record["最終更新日時"] = currentTimestamp_();
+  sheet.getRange(rowIndex, 1, 1, EVENT_HEADERS.length).setValues([toRow_(record, EVENT_HEADERS)]);
 }
 
 // ============================
