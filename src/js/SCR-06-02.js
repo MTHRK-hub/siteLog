@@ -50,7 +50,7 @@
     const lines = placeStr.split(/\r?\n/);
     const firstLine = c.escapeHtml(lines[0] || "");
     const restLines = lines.slice(1).map(function (l) { return c.escapeHtml(l); });
-    let dd = '<a href="' + c.escapeHtml(urlStr) + '" target="_blank" rel="noopener">' + firstLine + "</a>";
+    let dd = '<a class="name-link" href="' + c.escapeHtml(urlStr) + '" target="_blank" rel="noopener">' + firstLine + "</a>";
     if (restLines.length) dd += "<br>" + restLines.join("<br>");
     return "<div class='detail-row'><dt>場所</dt><dd>" + dd + "</dd></div>";
   }
