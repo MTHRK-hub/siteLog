@@ -618,7 +618,8 @@
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
-    return y + "/" + m + "/" + day;
+    const dow = ["日", "月", "火", "水", "木", "金", "土"][d.getDay()];
+    return y + "/" + m + "/" + day + "(" + dow + ")";
   }
 
   // 生年月日文字列から現在の年齢（整数）を返す。無効な場合は null

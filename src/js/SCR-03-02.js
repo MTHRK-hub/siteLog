@@ -63,7 +63,7 @@
       "<div class='detail-row'><dt>名前</dt><dd>" + c.escapeHtml(friend["名前"]) + "</dd></div>" +
       "<div class='detail-row'><dt>LINE名</dt><dd>" + c.escapeHtml(friend["LINE名"]) + "</dd></div>" +
       "<div class='detail-row'><dt>性別</dt><dd>" + c.escapeHtml(friend["性別"]) + "</dd></div>" +
-      "<div class='detail-row'><dt>生年月日</dt><dd>" + c.escapeHtml(friend["生年月日"]) + "</dd></div>" +
+      "<div class='detail-row'><dt>生年月日</dt><dd>" + c.escapeHtml(c.formatDate(friend["生年月日"])) + "</dd></div>" +
       "<div class='detail-row'><dt>年齢</dt><dd>" + c.escapeHtml(c.calcAge(friend, loginUser)) + "</dd></div>" +
       "<div class='detail-row'><dt>職業</dt><dd>" + c.escapeHtml(friend["職業"]) + "</dd></div>" +
       "<div class='detail-row'><dt>出会った日</dt><dd>" + c.escapeHtml(c.formatDate(friend["出会った日"])) + "</dd></div>" +
