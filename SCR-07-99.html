@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿 - 支出入力</title>
+  <link rel="stylesheet" href="src/css/common.css" />
+  <link rel="stylesheet" href="src/css/SCR-01-01.css" />
+  <link rel="stylesheet" href="src/css/SCR-07-99.css" />
+</head>
+<body class="login-page">
+  <div class="app">
+    <div class="card login-wrap">
+      <h2 class="exp-title">支出入力フォーム</h2>
+      <form id="expenditure-form" novalidate>
+        <div class="field">
+          <label for="exp-user-id">ユーザーID</label>
+          <input id="exp-user-id" name="ユーザーID" type="text" autocomplete="username" />
+        </div>
+        <div class="field">
+          <label for="exp-date">日付</label>
+          <input id="exp-date" name="日付" type="date" />
+        </div>
+        <div class="field">
+          <label for="exp-category">カテゴリ</label>
+          <select id="exp-category" name="カテゴリ">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="exp-type">種別</label>
+          <select id="exp-type" name="種別" disabled>
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="exp-content">内容</label>
+          <input id="exp-content" name="内容" type="text" />
+        </div>
+        <div class="field">
+          <label for="exp-amount">金額</label>
+          <input id="exp-amount" name="金額" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label for="exp-note">備考</label>
+          <input id="exp-note" name="備考" type="text" />
+        </div>
+
+        <p id="exp-message" class="error-msg" role="alert"></p>
+
+        <div class="login-actions">
+          <button type="submit" class="btn btn-primary">登録</button>
+          <button type="button" id="btn-close" class="btn btn-secondary">閉じる</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirm-dialog" class="dialog-overlay" hidden>
+    <div class="dialog-box">
+      <p class="dialog-msg">登録しますか？</p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-primary" id="btn-confirm-ok">はい</button>
+        <button type="button" class="btn btn-secondary" id="btn-confirm-cancel">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.SITELOG_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzslsgfnlEFzyDA6W4ysgPJYz8w2PDOG_bCZh5qCy7lQvnfyYa9rR-kkLZGGXENb81D/exec";
+  </script>
+  <script src="src/js/common.js"></script>
+  <script src="src/js/SCR-07-99.js"></script>
+</body>
+</html>

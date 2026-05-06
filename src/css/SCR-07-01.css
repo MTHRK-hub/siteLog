@@ -83,9 +83,10 @@
   white-space: nowrap;
 }
 
-/* 削除ボタン行 */
+/* 支出実績・削除ボタン行 */
 .cashflow-delete-row {
   display: flex;
   justify-content: center;
+  gap: 12px;
   margin-top: 24px;
 }

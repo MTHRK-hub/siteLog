@@ -11,7 +11,8 @@
     projects: { gid: "830834819", name: "企画情報" },
     cashflows: { gid: "662697822", name: "キャッシュフロー情報" },
     events: { gid: "273287419", name: "イベント情報" },
-    enums: { gid: "1382604625", name: "Enum情報" }
+    enums: { gid: "1382604625", name: "Enum情報" },
+    expenditures: { gid: "801460108", name: "支出情報" }
   };
   // 書き込みAPIのURL（window.SITELOG_WEBAPP_URL または window.SITELOG_FRIENDS_WEBAPP_URL を設定）
   const WRITE_API_URL = (window.SITELOG_WEBAPP_URL || window.SITELOG_FRIENDS_WEBAPP_URL || "");
@@ -359,6 +360,7 @@
   var PROJECT_ENCRYPT_FIELDS = ["日付", "時間", "場所", "場所URL", "内容", "説明", "男性参加費", "女性参加費"];
   var CASHFLOW_ENCRYPT_FIELDS = ["年月", "収支区分", "内訳", "金額", "備考"];
   var EVENT_ENCRYPT_FIELDS = ["日付", "時間", "項目", "場所", "イベント名", "参加費", "URL", "参加フラグ"];
+  var EXPENDITURE_ENCRYPT_FIELDS = ["日付", "カテゴリ", "種別", "内容", "金額", "備考"];
 
   function encryptRecord(record, fields) {
     var out = {};
@@ -422,6 +424,14 @@
 
   function decryptEventRecord(record) {
     return decryptRecord(record, EVENT_ENCRYPT_FIELDS);
+  }
+
+  function encryptExpenditureRecord(record) {
+    return encryptRecord(record, EXPENDITURE_ENCRYPT_FIELDS);
+  }
+
+  function decryptExpenditureRecord(record) {
+    return decryptRecord(record, EXPENDITURE_ENCRYPT_FIELDS);
   }
 
   // =========================
@@ -545,6 +555,14 @@
 
   async function updateEvent(record) {
     await callWriteApi("updateEvent", record);
+  }
+
+  async function appendExpenditure(record) {
+    await callWriteApi("appendExpenditure", record);
+  }
+
+  async function deleteExpenditure(id) {
+    await callWriteApi("deleteExpenditure", { id: id });
   }
 
   async function updateEventHideFlag(id) {
@@ -760,6 +778,7 @@
     cashflowPlan: "SCR-07-01.html",
     cashflowCreate: "SCR-07-02.html",
     cashflowEdit: "SCR-07-03.html",
+    expenditureList: "SCR-07-04.html",
     eventList: "SCR-08-01.html",
     eventDetail: "SCR-08-02.html",
     eventCreate: "SCR-08-03.html",
@@ -1131,6 +1150,10 @@
     deleteEvent: deleteEvent,
     updateEventHideFlag: updateEventHideFlag,
     getEventId: getEventId,
-    findEventById: findEventById
+    findEventById: findEventById,
+    encryptExpenditureRecord: encryptExpenditureRecord,
+    decryptExpenditureRecord: decryptExpenditureRecord,
+    appendExpenditure: appendExpenditure,
+    deleteExpenditure: deleteExpenditure
   };
 })();

@@ -1,0 +1,18 @@
+.exp-list-title {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.expenditure-list-page .amount-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.expenditure-list-page .btn-danger {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  font-size: 0.85rem;
+}

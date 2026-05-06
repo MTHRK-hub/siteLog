@@ -142,6 +142,13 @@
     c.navigate("cashflowEdit");
   });
 
+  document.getElementById("btn-expenditure").addEventListener("click", function () {
+    const ym = monthFilter.value;
+    if (!ym) return;
+    c.setSelectedCashflowYm(ym);
+    c.navigate("expenditureList");
+  });
+
   const deleteDialog = document.getElementById("delete-dialog");
   const deleteDialogMsg = document.getElementById("delete-dialog-msg");
   const btnDeleteOk = document.getElementById("btn-delete-ok");
