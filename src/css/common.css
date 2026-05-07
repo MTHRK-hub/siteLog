@@ -379,7 +379,7 @@ thead th {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 0 5px;
+  padding: 0 0 20px;
   opacity: 0.8;
   pointer-events: none;
 }
