@@ -14,7 +14,10 @@
     screenId: "SCR-07-04",
     title: "支出実績一覧",
     back: "cashflow-plan",
-    showUser: true
+    showUser: true,
+    extraId: "hdr-btn-new-expenditure",
+    extraLabel: "新規作成",
+    extraUrl: "../../SCR-07-99.html"
   });
 
   const loginUser = c.getCurrentUser();
@@ -30,6 +33,17 @@
 
   let expenditures = [];
   let pendingDeleteId = null;
+
+  function formatDateMmDd(dateStr) {
+    if (!dateStr) return "";
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr).trim());
+    if (!m) return dateStr;
+    const d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const dow = ["日", "月", "火", "水", "木", "金", "土"][d.getDay()];
+    return mm + "/" + dd + "(" + dow + ")";
+  }
 
   function formatAmount(val) {
     const n = parseInt(String(val || "").replace(/[^0-9\-]/g, ""), 10);
@@ -53,22 +67,23 @@
       return;
     }
 
-    tbody.innerHTML = expenditures.map(function (r, idx) {
+    tbody.innerHTML = expenditures.map(function (r) {
       return "<tr>" +
-        "<td>" + c.escapeHtml(r["日付"] || "") + "</td>" +
+        "<td>" + c.escapeHtml(formatDateMmDd(r["日付"] || "")) + "</td>" +
         "<td>" + c.escapeHtml(r["カテゴリ"] || "") + "</td>" +
         "<td>" + c.escapeHtml(r["種別"] || "") + "</td>" +
         "<td>" + c.escapeHtml(r["内容"] || "") + "</td>" +
         "<td class='amount-cell'>" + c.escapeHtml(formatAmount(r["金額"])) + "</td>" +
         "<td>" + c.escapeHtml(r["備考"] || "") + "</td>" +
-        "<td><button class='btn btn-detail btn-edit-exp' data-idx='" + idx + "'>編集</button></td>" +
+        "<td><button class='btn btn-detail btn-edit-exp' data-id='" + c.escapeHtml(String(r["id"] || "")) + "'>編集</button></td>" +
         "<td><button class='btn btn-danger btn-delete-exp' data-id='" + c.escapeHtml(String(r["id"] || "")) + "'>削除</button></td>" +
         "</tr>";
     }).join("");
 
     tbody.querySelectorAll(".btn-edit-exp").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        alert("支出編集画面は後日実装予定です。");
+        c.setSelectedExpenditureId(btn.dataset.id);
+        c.navigate("expenditureEdit");
       });
     });
 
@@ -94,11 +109,13 @@
     statusEl.textContent = "削除中...";
     try {
       await c.deleteExpenditure(id);
-      expenditures = expenditures.filter(function (r) {
-        return String(r["id"] || "") !== String(id);
+      c.setCompletionInfo({
+        title: "支出削除完了",
+        message: "支出データが削除されました。",
+        buttonLabel: "一覧に戻る",
+        backScreen: "expenditureList"
       });
-      render();
-      statusEl.textContent = "";
+      c.navigate("completion");
     } catch (err) {
       statusEl.textContent = err && err.message ? err.message : "削除に失敗しました。";
     }

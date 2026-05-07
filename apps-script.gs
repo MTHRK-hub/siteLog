@@ -271,6 +271,10 @@ function doPost(e) {
       appendExpenditure_(payload);
       return jsonOk_({ message: "appended" });
     }
+    if (action === "updateExpenditure") {
+      updateExpenditure_(payload);
+      return jsonOk_({ message: "updated" });
+    }
     if (action === "deleteExpenditure") {
       deleteExpenditure_(payload);
       return jsonOk_({ message: "deleted" });
@@ -750,6 +754,20 @@ function appendExpenditure_(record) {
 
   record["最終更新日時"] = currentTimestamp_();
   sheet.appendRow(toRow_(record, EXPENDITURE_HEADERS));
+}
+
+function updateExpenditure_(record) {
+  const sheet = getSheet_(EXPENDITURE_SHEET_NAME);
+  ensureHeader_(sheet, EXPENDITURE_HEADERS);
+
+  const id = normalize_(record.id);
+  if (!id) throw new Error("id is required");
+
+  const rowIndex = findRowById_(sheet, id);
+  if (rowIndex < 0) throw new Error("target id not found: " + id);
+
+  record["最終更新日時"] = currentTimestamp_();
+  sheet.getRange(rowIndex, 1, 1, EXPENDITURE_HEADERS.length).setValues([toRow_(record, EXPENDITURE_HEADERS)]);
 }
 
 function deleteExpenditure_(payload) {

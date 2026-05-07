@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>現場記録簿 - 支出編集</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/SCR-00-01.css" />
+  <link rel="stylesheet" href="../css/SCR-07-05.css" />
+</head>
+<body class="expenditure-edit-page">
+  <div class="app">
+    <div class="card">
+      <form id="expenditure-edit-form" class="form-grid" novalidate>
+        <label>日付<input id="exp-date" name="日付" type="date" /></label>
+        <label>カテゴリ
+          <select id="exp-category" name="カテゴリ">
+            <option value=""></option>
+          </select>
+        </label>
+        <label>種別
+          <select id="exp-type" name="種別" disabled>
+            <option value=""></option>
+          </select>
+        </label>
+        <label>内容<input id="exp-content" name="内容" type="text" /></label>
+        <label>金額<input id="exp-amount" name="金額" type="number" min="0" /></label>
+        <label>備考<input id="exp-note" name="備考" type="text" /></label>
+
+        <p id="exp-edit-error" class="error-msg" role="alert"></p>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">更新</button>
+          <button type="button" class="btn btn-secondary" id="btn-edit-cancel">キャンセル</button>
+        </div>
+      </form>
+
+      <div id="confirm-dialog" class="dialog-overlay" hidden>
+        <div class="dialog-box">
+          <p class="dialog-msg">更新しますか？</p>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-primary" id="btn-confirm-ok">はい</button>
+            <button type="button" class="btn btn-secondary" id="btn-confirm-cancel">キャンセル</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.SITELOG_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzslsgfnlEFzyDA6W4ysgPJYz8w2PDOG_bCZh5qCy7lQvnfyYa9rR-kkLZGGXENb81D/exec";
+  </script>
+  <script src="../js/common.js"></script>
+  <script src="../js/SCR-07-05.js"></script>
+</body>
+</html>

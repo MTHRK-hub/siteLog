@@ -34,7 +34,8 @@
     selectedCashflowYm: "siteLog-selected-cashflow-ym",
     completionInfo: "siteLog-completion-info",
     events: "siteLog-events-data",
-    selectedEventId: "siteLog-selected-event-id"
+    selectedEventId: "siteLog-selected-event-id",
+    selectedExpenditureId: "siteLog-selected-expenditure-id"
   };
 
   // =========================
@@ -561,8 +562,21 @@
     await callWriteApi("appendExpenditure", record);
   }
 
+  async function updateExpenditure(record) {
+    await callWriteApi("updateExpenditure", record);
+  }
+
   async function deleteExpenditure(id) {
     await callWriteApi("deleteExpenditure", { id: id });
+  }
+
+  function setSelectedExpenditureId(id) {
+    sessionStorage.setItem(STORAGE_KEYS.selectedExpenditureId, String(id));
+  }
+
+  function getSelectedExpenditureId() {
+    const raw = sessionStorage.getItem(STORAGE_KEYS.selectedExpenditureId);
+    return raw == null ? "" : String(raw);
   }
 
   async function updateEventHideFlag(id) {
@@ -779,6 +793,7 @@
     cashflowCreate: "SCR-07-02.html",
     cashflowEdit: "SCR-07-03.html",
     expenditureList: "SCR-07-04.html",
+    expenditureEdit: "SCR-07-05.html",
     eventList: "SCR-08-01.html",
     eventDetail: "SCR-08-02.html",
     eventCreate: "SCR-08-03.html",
@@ -1154,6 +1169,9 @@
     encryptExpenditureRecord: encryptExpenditureRecord,
     decryptExpenditureRecord: decryptExpenditureRecord,
     appendExpenditure: appendExpenditure,
-    deleteExpenditure: deleteExpenditure
+    updateExpenditure: updateExpenditure,
+    deleteExpenditure: deleteExpenditure,
+    setSelectedExpenditureId: setSelectedExpenditureId,
+    getSelectedExpenditureId: getSelectedExpenditureId
   };
 })();

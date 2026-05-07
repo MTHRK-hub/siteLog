@@ -103,10 +103,12 @@
         projectCreate:  "SCR-06-03.html",
         projectEdit:    "SCR-06-04.html",
         projectMessageSetting: "SCR-06-05.html",
-        cashflowPlan:   "SCR-07-01.html",
-        cashflowCreate: "SCR-07-02.html",
-        cashflowEdit:   "SCR-07-03.html",
-        eventList:      "SCR-08-01.html",
+        cashflowPlan:    "SCR-07-01.html",
+        cashflowCreate:  "SCR-07-02.html",
+        cashflowEdit:    "SCR-07-03.html",
+        expenditureList: "SCR-07-04.html",
+        expenditureEdit: "SCR-07-05.html",
+        eventList:       "SCR-08-01.html",
         eventDetail:    "SCR-08-02.html",
         eventCreate:    "SCR-08-03.html",
         eventEdit:      "SCR-08-04.html"
@@ -131,6 +133,9 @@
         } else if (data.type === "logout") {
           // ヘッダのログアウト → ログイン画面へ遷移(セッションクリア付き)
           contentFrame.src = "./SCR-01-01.html?logout=1";
+
+        } else if (data.type === "openNewTab") {
+          if (data.url) window.open(data.url, "_blank");
 
         } else if (data.type === "closeApp") {
           // ログイン画面の「閉じる」→ フレームごと閉じる

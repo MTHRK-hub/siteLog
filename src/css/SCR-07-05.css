@@ -1,0 +1,46 @@
+.expenditure-edit-page .form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.expenditure-edit-page label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.expenditure-edit-page input,
+.expenditure-edit-page select {
+  width: 100%;
+  min-height: var(--touch-min);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.expenditure-edit-page input:focus,
+.expenditure-edit-page select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.expenditure-edit-page select {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.expenditure-edit-page select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.expenditure-edit-page .form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}

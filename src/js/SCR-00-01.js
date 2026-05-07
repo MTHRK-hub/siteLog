@@ -74,6 +74,7 @@
     var extraId      = cfg.extraId      || "";
     var extraLabel   = cfg.extraLabel   || "";
     var extraScreen  = cfg.extraScreen  || "";
+    var extraUrl     = cfg.extraUrl     || "";
     var extraEnabled = cfg.extraEnabled !== false;
 
     // 上段左: ユーザー名
@@ -164,13 +165,13 @@
     root.innerHTML = "";
     root.appendChild(header);
 
-    bindButtons(back, extraId, extraScreen);
+    bindButtons(back, extraId, extraScreen, extraUrl);
   }
 
   // ===========================
   // ボタンイベント設定
   // ===========================
-  function bindButtons(back, extraId, extraScreen) {
+  function bindButtons(back, extraId, extraScreen, extraUrl) {
     // ログアウト
     var logoutBtn = document.getElementById("hdr-btn-logout");
     if (logoutBtn) {
@@ -201,12 +202,18 @@
     }
 
     // 右下ページ固有ボタン
-    if (extraId && extraScreen) {
+    if (extraId) {
       var extraBtn = document.getElementById(extraId);
       if (extraBtn) {
-        extraBtn.addEventListener("click", function () {
-          navigateMain(extraScreen);
-        });
+        if (extraUrl) {
+          extraBtn.addEventListener("click", function () {
+            window.parent.postMessage({ type: "openNewTab", url: extraUrl }, "*");
+          });
+        } else if (extraScreen) {
+          extraBtn.addEventListener("click", function () {
+            navigateMain(extraScreen);
+          });
+        }
       }
     }
   }
