@@ -175,17 +175,17 @@
     });
   }
 
-  async function loadSheetRows(key) {
+  async function loadSheetRows(key, allowEmpty) {
     const spec = SHEETS[key];
     try {
       const res = await fetch(csvUrl(spec.gid), { cache: "no-store" });
       if (!res.ok) throw new Error(spec.name + " の取得に失敗しました");
       const rows = parseCsv(await res.text());
-      if (!rows.length) throw new Error(spec.name + " に有効データがありません");
+      if (!allowEmpty && !rows.length) throw new Error(spec.name + " に有効データがありません");
       return rows;
     } catch (_) {
       const rows = await loadSheetRowsViaGviz(spec.gid);
-      if (!rows.length) throw new Error(spec.name + " に有効データがありません");
+      if (!allowEmpty && !rows.length) throw new Error(spec.name + " に有効データがありません");
       return rows;
     }
   }
@@ -242,9 +242,10 @@
     return "現場記録情報を取得できません。シート共有設定を確認してください。";
   }
 
-  async function safeLoadSheetRows(key) {
+  async function safeLoadSheetRows(key, options) {
+    var allowEmpty = options && options.allowEmpty;
     try {
-      const rows = await loadSheetRows(key);
+      const rows = await loadSheetRows(key, allowEmpty);
       return { ok: true, rows: rows, message: "" };
     } catch (_) {
       return { ok: false, rows: [], message: getSheetErrorMessage(key, []) };
@@ -364,7 +365,7 @@
     }
   }
 
-  var FRIEND_ENCRYPT_FIELDS = ["名前", "LINE名", "年齢差", "生年月日", "性別", "職業", "出会った日", "出会った場所", "出身", "居住地", "居住形態", "更新月", "趣味", "家族構成", "話したこと", "提案対象", "その他", "今後の予定"];
+  var FRIEND_ENCRYPT_FIELDS = ["名前", "LINE名", "年齢差", "生年月日", "性別", "職業", "出会った日", "出会った場所", "出身", "居住地", "居住形態", "更新月", "職場", "趣味", "家族構成", "話したこと", "提案対象", "その他", "今後の予定"];
   var SITELOG_ENCRYPT_FIELDS = ["日付", "項目", "記録", "ToDo"];
   var MANUSCRIPT_ENCRYPT_FIELDS = ["タイトル", "メモ"];
   var PROJECT_ENCRYPT_FIELDS = ["日付", "時間", "場所", "場所URL", "内容", "説明", "男性参加費", "女性参加費"];

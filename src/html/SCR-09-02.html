@@ -13,17 +13,16 @@
     <div class="card">
       <dl class="detail-rows" id="shop-detail-content"></dl>
       <div class="detail-actions">
-        <button type="button" class="btn btn-primary" id="btn-shop-register">登録</button>
-        <button type="button" class="btn btn-secondary" id="btn-shop-cancel">キャンセル</button>
+        <button type="button" class="btn btn-danger" id="btn-shop-delete">削除</button>
       </div>
-      <div id="register-dialog" class="dialog-overlay" hidden>
+      <div id="delete-dialog" class="dialog-overlay" hidden>
         <div class="dialog-box">
-          <p class="dialog-msg">登録しますか？</p>
+          <p class="dialog-msg">お店情報を削除しますか？</p>
           <div class="dialog-actions">
-            <button type="button" class="btn btn-primary" id="btn-register-confirm">はい</button>
-            <button type="button" class="btn btn-secondary" id="btn-register-cancel">キャンセル</button>
+            <button type="button" class="btn btn-danger" id="btn-delete-confirm">はい</button>
+            <button type="button" class="btn btn-secondary" id="btn-delete-cancel">キャンセル</button>
           </div>
-          <p id="register-error" class="error-msg" role="alert"></p>
+          <p id="delete-error" class="error-msg" role="alert"></p>
         </div>
       </div>
     </div>

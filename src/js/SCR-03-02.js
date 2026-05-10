@@ -72,6 +72,7 @@
       "<div class='detail-row'><dt>居住地</dt><dd>" + c.escapeHtml(friend["居住地"]) + "</dd></div>" +
       "<div class='detail-row'><dt>居住形態</dt><dd>" + c.escapeHtml(friend["居住形態"]) + "</dd></div>" +
       (friend["居住形態"] === "一人暮らし" ? "<div class='detail-row'><dt>更新月</dt><dd>" + c.escapeHtml(friend["更新月"]) + "</dd></div>" : "") +
+      "<div class='detail-row'><dt>職場</dt><dd>" + c.escapeHtml(friend["職場"]) + "</dd></div>" +
       "<div class='detail-row'><dt>趣味</dt><dd>" + c.escapeHtml(friend["趣味"]) + "</dd></div>" +
       "<div class='detail-row'><dt>家族構成</dt><dd>" + c.escapeHtml(friend["家族構成"]) + "</dd></div>" +
       "<div class='detail-row'><dt>話したこと</dt><dd>" + c.escapeHtml(friend["話したこと"]) + "</dd></div>" +

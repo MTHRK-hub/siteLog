@@ -127,6 +127,7 @@
       "居住地": String(fd.get("居住地") || "").trim(),
       "居住形態": String(fd.get("居住形態") || "").trim(),
       "更新月": renewalMonthInput.disabled ? "" : String(fd.get("更新月") || "").trim(),
+      "職場": String(fd.get("職場") || "").trim(),
       "趣味": String(fd.get("趣味") || "").trim(),
       "家族構成": String(fd.get("家族構成") || "").trim(),
       "話したこと": String(fd.get("話したこと") || "").trim(),

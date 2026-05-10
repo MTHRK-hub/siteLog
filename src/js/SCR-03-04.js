@@ -109,6 +109,7 @@
     if (friend["居住形態"] === "一人暮らし") {
       renewalMonthInput.value = friend["更新月"] || "";
     }
+    form.elements["職場"].value = friend["職場"] || "";
     form.elements["趣味"].value = friend["趣味"] || "";
     form.elements["家族構成"].value = friend["家族構成"] || "";
     form.elements["話したこと"].value = friend["話したこと"] || "";
@@ -174,6 +175,7 @@
         "居住地": String(fd.get("居住地") || "").trim(),
         "居住形態": String(fd.get("居住形態") || "").trim(),
         "更新月": renewalMonthInput.disabled ? "" : String(fd.get("更新月") || "").trim(),
+        "職場": String(fd.get("職場") || "").trim(),
         "趣味": String(fd.get("趣味") || "").trim(),
         "家族構成": String(fd.get("家族構成") || "").trim(),
         "話したこと": String(fd.get("話したこと") || "").trim(),

@@ -1,6 +1,5 @@
 .shop-detail-page .detail-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  justify-content: center;
   margin-top: 24px;
 }

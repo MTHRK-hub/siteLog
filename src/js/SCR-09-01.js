@@ -115,7 +115,7 @@
 
   async function loadShops() {
     status.textContent = "読み込み中...";
-    const result = await c.safeLoadSheetRows("shops");
+    const result = await c.safeLoadSheetRows("shops", { allowEmpty: true });
     if (!result.ok) {
       status.textContent = result.message || "お店情報を取得できませんでした。";
       return;

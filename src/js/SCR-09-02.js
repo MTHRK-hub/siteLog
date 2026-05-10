@@ -3,10 +3,9 @@
   if (!c.requireLogin()) return;
 
   const content = document.getElementById("shop-detail-content");
-  const btnRegister = document.getElementById("btn-shop-register");
-  const btnCancel = document.getElementById("btn-shop-cancel");
-  const dialog = document.getElementById("register-dialog");
-  const registerError = document.getElementById("register-error");
+  const btnDelete = document.getElementById("btn-shop-delete");
+  const dialog = document.getElementById("delete-dialog");
+  const deleteError = document.getElementById("delete-error");
 
   const shops = c.getShops();
   const selectedId = c.getSelectedShopId();
@@ -24,7 +23,7 @@
       extraEnabled: false
     });
     content.innerHTML = "<div class='detail-row'><dt>情報</dt><dd>対象データがありません。一覧に戻ってください。</dd></div>";
-    btnRegister.disabled = true;
+    btnDelete.disabled = true;
     return;
   }
 
@@ -61,31 +60,36 @@
     row("予約可否", shop["予約可否"]) +
     row("備考", shop["備考"]);
 
-  btnCancel.addEventListener("click", function () {
-    c.navigate("shopList");
-  });
-
-  btnRegister.addEventListener("click", function () {
-    registerError.textContent = "";
+  btnDelete.addEventListener("click", function () {
+    deleteError.textContent = "";
     dialog.hidden = false;
   });
 
-  document.getElementById("btn-register-cancel").addEventListener("click", function () {
+  document.getElementById("btn-delete-cancel").addEventListener("click", function () {
     dialog.hidden = true;
   });
 
-  document.getElementById("btn-register-confirm").addEventListener("click", async function () {
-    registerError.textContent = "";
-    const btn = document.getElementById("btn-register-confirm");
+  document.getElementById("btn-delete-confirm").addEventListener("click", async function () {
+    deleteError.textContent = "";
+    const btn = document.getElementById("btn-delete-confirm");
     btn.disabled = true;
-    dialog.hidden = true;
 
     try {
-      await c.updateShop(c.encryptShopRecord(shop));
-      c.navigate("shopList");
+      const shopId = c.getShopId(shop, found.index);
+      await c.deleteShop(shopId);
+
+      const updated = shops.filter(function (_, i) { return i !== found.index; });
+      c.setShops(updated);
+
+      c.setCompletionInfo({
+        title: "お店削除完了",
+        message: "お店情報が削除されました。",
+        buttonLabel: "一覧に戻る",
+        backScreen: "shopList"
+      });
+      c.navigate("completion");
     } catch (err) {
-      registerError.textContent = err && err.message ? err.message : "登録に失敗しました。";
-      dialog.hidden = false;
+      deleteError.textContent = err && err.message ? err.message : "削除に失敗しました。";
       btn.disabled = false;
     }
   });
