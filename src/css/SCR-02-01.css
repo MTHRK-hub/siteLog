@@ -4,40 +4,140 @@
 }
 
 .menu-link {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius);
-  background: var(--surface-alt);
-  padding: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 52px 14px 16px;
+  min-height: 54px;
+  width: 100%;
+
+  /* ティール系グラデーション */
+  background: linear-gradient(
+    180deg,
+    #3d8a9a 0%,
+    #286878 40%,
+    #1b5262 70%,
+    #114050 100%
+  );
+
+  /* 木製フレーム風ボーダー */
+  border: 2px solid #c49030;
+  border-bottom-color: #8a6018;
+  border-radius: 12px;
+
+  /* 3D浮き上がり効果 */
+  box-shadow:
+    0 4px 0 #7a5010,
+    0 7px 16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+
   font-size: 1rem;
   font-weight: 700;
-  color: var(--text);
+  color: #e8f5f8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
   cursor: pointer;
   text-align: center;
-  min-height: var(--touch-min);
+  letter-spacing: 0.03em;
+}
+
+/* 上部ハイライトライン */
+.menu-link::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  right: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+}
+
+/* 右側アイコン円 */
+.menu-link::after {
+  content: attr(data-icon);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  font-size: 1.1rem;
+  background: radial-gradient(circle, rgba(255, 210, 120, 0.12), rgba(0, 0, 0, 0.25));
+  border: 1px solid rgba(196, 144, 48, 0.6);
+  border-radius: 50%;
 }
 
 .menu-link:hover {
-  border-color: rgba(61, 158, 255, 0.35);
-  color: var(--accent);
-}
-
-.menu-link.menu-link-admin {
-  background: #2c3a50;
-  border-color: rgba(255, 255, 255, 0.06);
-  color: #a0b4cc;
-}
-
-.menu-link.menu-link-admin:hover {
-  border-color: rgba(160, 180, 204, 0.4);
-  color: #c8d8e8;
+  background: linear-gradient(
+    180deg,
+    #4d9aaa 0%,
+    #387888 40%,
+    #2b6272 70%,
+    #215060 100%
+  );
+  border-color: #d4a040;
+  border-bottom-color: #9a7020;
 }
 
 .menu-link:active {
-  /*ボタンを押したとき*/
-  -webkit-transform: translateY(4px);
-  /*下に動く*/
-  transform: translateY(4px);
-  /*影を小さく*/
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
-  border-bottom: none;
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #7a5010,
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.25);
+  border-bottom-color: #c49030;
+}
+
+/* 管理者ボタン */
+.menu-link.menu-link-admin {
+  background: linear-gradient(
+    180deg,
+    #344a60 0%,
+    #253848 40%,
+    #1c2e3c 100%
+  );
+  border-color: #6a7e90;
+  border-bottom-color: #4a5e70;
+  box-shadow:
+    0 3px 0 #3a4e60,
+    0 5px 12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  color: #a8c8d8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.menu-link.menu-link-admin::before {
+  right: 52px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.menu-link.menu-link-admin::after {
+  border-color: rgba(106, 126, 144, 0.5);
+  background: radial-gradient(circle, rgba(160, 190, 210, 0.1), rgba(0, 0, 0, 0.2));
+}
+
+.menu-link.menu-link-admin:hover {
+  background: linear-gradient(
+    180deg,
+    #445a70 0%,
+    #354858 40%,
+    #2c3e4c 100%
+  );
+  border-color: #8a9eb0;
+  border-bottom-color: #6a7e90;
+  color: #c8d8e8;
+}
+
+.menu-link.menu-link-admin:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #3a4e60,
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-bottom-color: #6a7e90;
 }
