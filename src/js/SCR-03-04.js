@@ -30,12 +30,13 @@
   }
   instagramNameInput.addEventListener("input", syncInstagramUrlState);
 
-  // 居住形態が一人暮らし以外の場合は更新月を非活性にする
+  // 居住形態が一人暮らし以外の場合は更新月を非表示にする
   const residenceTypeSelect = document.getElementById("input-residence-type");
   const renewalMonthInput = document.getElementById("input-renewal-month");
+  const renewalMonthLabel = renewalMonthInput.closest("label");
   function syncRenewalMonthState() {
     const isAlone = residenceTypeSelect.value === "一人暮らし";
-    renewalMonthInput.disabled = !isAlone;
+    renewalMonthLabel.hidden = !isAlone;
     if (!isAlone) renewalMonthInput.value = "";
   }
   residenceTypeSelect.addEventListener("change", syncRenewalMonthState);
@@ -190,7 +191,7 @@
         "出身": String(fd.get("出身") || "").trim(),
         "居住地": String(fd.get("居住地") || "").trim(),
         "居住形態": String(fd.get("居住形態") || "").trim(),
-        "更新月": renewalMonthInput.disabled ? "" : String(fd.get("更新月") || "").trim(),
+        "更新月": renewalMonthLabel.hidden ? "" : String(fd.get("更新月") || "").trim(),
         "職場": String(fd.get("職場") || "").trim(),
         "趣味": String(fd.get("趣味") || "").trim(),
         "家族構成": String(fd.get("家族構成") || "").trim(),
