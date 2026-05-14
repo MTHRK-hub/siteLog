@@ -123,3 +123,19 @@
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* 出会った場所 - プルダウン+テキスト横並び */
+.friend-form-page .place-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.friend-form-page .place-type-select {
+  flex: 0 0 38%;
+  width: auto;
+}
+
+.friend-form-page .place-input-row input {
+  flex: 1;
+  width: auto;
+}

@@ -53,12 +53,15 @@
     r.addEventListener("change", syncFuturePlanState);
   });
 
-  // 提案対象: Enumシートから選択肢を動的生成
-  async function loadProposeTargetOptions() {
+  const metPlaceTypeSelect = document.getElementById("input-met-place-type");
+  const metPlaceTextInput = document.getElementById("input-met-place-text");
+
+  // EnumシートからEnum名で選択肢を取得
+  async function loadEnumOptions(enumName) {
     const result = await c.safeLoadSheetRows("enums");
     if (!result.ok) return [];
     const row = result.rows.find(function (r) {
-      return String(r["Enum名"] || "").trim() === "提案対象";
+      return String(r["Enum名"] || "").trim() === enumName;
     });
     if (!row) return [];
     const options = [];
@@ -67,6 +70,21 @@
       if (v) options.push(v);
     }
     return options;
+  }
+
+  async function loadProposeTargetOptions() {
+    return loadEnumOptions("提案対象");
+  }
+
+  // 出会った場所の保存値を解析してプルダウンとテキストに分解
+  function parseMetPlaceValue(value, options) {
+    if (!value) return { type: "", text: "" };
+    for (let i = 0; i < options.length; i++) {
+      const opt = options[i];
+      if (value === opt) return { type: opt, text: "" };
+      if (value.startsWith(opt + "・")) return { type: opt, text: value.slice(opt.length + 1) };
+    }
+    return { type: "", text: value };
   }
 
   function renderProposeTargetCheckboxes(options, selectedValues) {
@@ -116,7 +134,17 @@
     });
     form.elements["職業"].value = friend["職業"] || "";
     form.elements["出会った日"].value = friend["出会った日"] || "";
-    form.elements["出会った場所"].value = friend["出会った場所"] || "";
+    loadEnumOptions("出会った場所").then(function (options) {
+      options.forEach(function (opt) {
+        const el = document.createElement("option");
+        el.value = opt;
+        el.textContent = opt;
+        metPlaceTypeSelect.appendChild(el);
+      });
+      const parsed = parseMetPlaceValue(friend["出会った場所"] || "", options);
+      metPlaceTypeSelect.value = parsed.type;
+      metPlaceTextInput.value = parsed.text;
+    });
     form.elements["出身"].value = friend["出身"] || "";
     form.elements["居住地"].value = friend["居住地"] || "";
     residenceTypeSelect.value = friend["居住形態"] || "";
@@ -187,7 +215,11 @@
         "性別": String(fd.get("性別") || "").trim(),
         "職業": String(fd.get("職業") || "").trim(),
         "出会った日": String(fd.get("出会った日") || "").trim(),
-        "出会った場所": String(fd.get("出会った場所") || "").trim(),
+        "出会った場所": (function () {
+          const type = metPlaceTypeSelect.value.trim();
+          const text = metPlaceTextInput.value.trim();
+          return type ? (text ? type + "・" + text : type) : text;
+        })(),
         "出身": String(fd.get("出身") || "").trim(),
         "居住地": String(fd.get("居住地") || "").trim(),
         "居住形態": String(fd.get("居住形態") || "").trim(),

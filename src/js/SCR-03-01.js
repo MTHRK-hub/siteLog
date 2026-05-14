@@ -16,8 +16,39 @@
   const status = document.getElementById("friend-load-status");
   const body = document.getElementById("friend-list-body");
   const filterSelect = document.getElementById("friend-filter");
+  const filterSubRow = document.getElementById("filter-sub-row");
+  const filterSubSelect = document.getElementById("friend-filter-sub");
 
   const loginUser = c.getCurrentUser();
+
+  const enumCache = { "出会った場所": null, "提案対象": null };
+
+  async function loadEnumOptions(enumName) {
+    if (enumCache[enumName]) return enumCache[enumName];
+    const result = await c.safeLoadSheetRows("enums");
+    if (!result.ok) return [];
+    const row = result.rows.find(function (r) {
+      return String(r["Enum名"] || "").trim() === enumName;
+    });
+    if (!row) return [];
+    const options = [];
+    for (let i = 1; i <= 15; i++) {
+      const v = String(row["値" + i] || "").trim();
+      if (v) options.push(v);
+    }
+    enumCache[enumName] = options;
+    return options;
+  }
+
+  function populateSubFilter(options) {
+    filterSubSelect.innerHTML = '<option value=""></option>';
+    options.forEach(function (opt) {
+      const el = document.createElement("option");
+      el.value = opt;
+      el.textContent = opt;
+      filterSubSelect.appendChild(el);
+    });
+  }
 
   function applyFilter(rows, filterValue) {
     if (!filterValue) return rows;
@@ -30,6 +61,21 @@
     if (filterValue === "予定あり") {
       return rows.filter(function (f) {
         return String(f["今後の予定"] || "").startsWith("あり:");
+      });
+    }
+    if (filterValue === "出会った場所") {
+      const subValue = filterSubSelect.value;
+      if (!subValue) return rows;
+      return rows.filter(function (f) {
+        const val = String(f["出会った場所"] || "");
+        return val === subValue || val.startsWith(subValue + "・");
+      });
+    }
+    if (filterValue === "提案対象") {
+      const subValue = filterSubSelect.value;
+      if (!subValue) return rows;
+      return rows.filter(function (f) {
+        return String(f["提案対象"] || "").split(",").map(function (s) { return s.trim(); }).indexOf(subValue) >= 0;
       });
     }
     return rows;
@@ -103,7 +149,19 @@
       render(applied);
     }
 
-    filterSelect.addEventListener("change", refreshView);
+    filterSelect.addEventListener("change", async function () {
+      const val = filterSelect.value;
+      if (val === "出会った場所" || val === "提案対象") {
+        const options = await loadEnumOptions(val);
+        populateSubFilter(options);
+        filterSubRow.removeAttribute("hidden");
+      } else {
+        filterSubRow.setAttribute("hidden", "");
+        filterSubSelect.innerHTML = '<option value=""></option>';
+      }
+      refreshView();
+    });
+    filterSubSelect.addEventListener("change", refreshView);
     refreshView();
   })();
 })();
