@@ -136,6 +136,7 @@
 }
 
 .friend-form-page .place-input-row input {
-  flex: 1;
+  flex: 0 1 45%;
+  min-width: 0;
   width: auto;
 }
