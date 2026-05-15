@@ -137,11 +137,12 @@
 
 .friend-form-page .place-type-select {
   flex: 0 0 38%;
+  min-width: 0;
   width: auto;
 }
 
 .friend-form-page .place-input-row input {
-  flex: 0 1 45%;
+  flex: 1 1 0;
   min-width: 0;
   width: auto;
 }
