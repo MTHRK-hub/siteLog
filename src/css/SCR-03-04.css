@@ -131,18 +131,15 @@
 
 /* 出会った場所 - プルダウン+テキスト横並び */
 .friend-form-page .place-input-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 38% 1fr;
   gap: 8px;
 }
 
 .friend-form-page .place-type-select {
-  flex: 0 0 38%;
   min-width: 0;
-  width: auto;
 }
 
 .friend-form-page .place-input-row input {
-  flex: 1 1 0;
   min-width: 0;
-  width: auto;
 }
